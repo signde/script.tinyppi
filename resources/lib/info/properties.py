@@ -298,7 +298,7 @@ def get_DoviTunnelVar() -> str:
     if bits and bits.group(1) == "8":
         try:
             with open(
-                "/sys/module/aml_media/parameters/dolby_vision_mode",
+                "/sys/module/amdolby_vision/parameters/dolby_vision_mode",
                 encoding="utf-8",
                 errors="ignore",
             ) as f:

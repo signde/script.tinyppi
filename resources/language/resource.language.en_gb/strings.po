@@ -48,7 +48,7 @@ msgid "Color gamut"
 msgstr ""
 
 msgctxt "#32016"
-msgid "Only CoreELEC 22 or later is supported"
+msgid "Only CoreELEC 21 or later is supported"
 msgstr ""
 
 msgctxt "#32017"

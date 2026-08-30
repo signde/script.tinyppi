@@ -16,44 +16,43 @@ from core.utils import PROP_HDR10PLUS_PRESENT, clear_overlay_state
 _ADDON      = xbmcaddon.Addon()
 _ADDON_PATH = _ADDON.getAddonInfo("path")
 
-# The Dolby Vision driver, as CoreELEC 22 (kernel 5.15, Amlogic-ne) exposes it.
+# The Dolby Vision driver, as this fork (kernel 4.9, amdolby_vision) exposes it.
 # Every value below is the one CoreELEC's own Kodi writes to these nodes in
 # CAMLCodec::OpenDecoder / CloseDecoder, which is what this add-on has to agree
 # with: it drives the same driver, on the same box, mid-playback.
-_POLICY  = "/sys/module/aml_media/parameters/dolby_vision_policy"
-_ENABLE  = "/sys/module/aml_media/parameters/dolby_vision_enable"
-_DVMODE  = "/sys/class/amdolby_vision/dv_mode"
+_POLICY  = "/sys/module/amdolby_vision/parameters/dolby_vision_policy"
+_ENABLE  = "/sys/module/amdolby_vision/parameters/dolby_vision_enable"
+_DVMODE  = "/sys/module/amdolby_vision/parameters/dolby_vision_mode"
 
 # Whether the driver runs Dolby Vision low latency, i.e. Player-LED: 0 is
 # DOLBY_VISION_LL_DISABLE (TV-LED), 1 is DOLBY_VISION_LL_YUV422 (Player-LED).
 # Kodi only writes it for a stream it turns Dolby Vision on for, so it answers
 # for that playback and not for an HDR10 one -- see ``_player_led_mode``.
-_LL_POLICY = "/sys/module/aml_media/parameters/dolby_vision_ll_policy"
+_LL_POLICY = "/sys/module/amdolby_vision/parameters/dolby_vision_ll_policy"
 
-# dolby_vision_policy: AMDV_FOLLOW_SINK, AMDV_FOLLOW_SOURCE and
-# AMDV_FORCE_OUTPUT_MODE.  Forcing is what a VS10 mode is; follow-source is what
+# dolby_vision_policy: DOLBY_VISION_FOLLOW_SINK, DOLBY_VISION_FOLLOW_SOURCE and
+# DOLBY_VISION_FORCE_OUTPUT_MODE.  Forcing is what a VS10 mode is; follow-source is what
 # Kodi leaves behind when it turns Dolby Vision off, and so what a mode that
 # wants no VS10 at all restores.
 _POLICY_FOLLOW_SOURCE = "1"
 _POLICY_FORCE_OUTPUT  = "2"
 
-# The output mode the Dolby Vision driver is actually sending, as opposed to
-# the one just asked for through _DVMODE.  It follows the driver's own
-# AMDV_OUTPUT_MODE enum, where 0 (IPT) and 1 (IPT tunnelled) are the two Dolby
-# Vision outputs and the rest are HDR10, SDR10, SDR8 and bypass.
-_DV_OUTPUT       = "/sys/module/aml_media/parameters/dolby_vision_mode"
+# The output mode the Dolby Vision driver is sending.  This kernel has one
+# mode node, so this is the same node as _DVMODE; the two spellings are a
+# CoreELEC 22 arrangement.  Values follow the driver's own enum, where 0 (IPT)
+# and 1 (IPT tunnelled) are the two Dolby Vision outputs and the rest are
+# HDR10 (2), SDR10 (3), SDR8 (4) and bypass (5).
+_DV_OUTPUT       = "/sys/module/amdolby_vision/parameters/dolby_vision_mode"
 _DV_OUTPUT_MODES = ("0", "1")
 
-# _DVMODE takes that same enum shifted by one -- Kodi writes it as
-# ``(AMDV_OUTPUT_MODE_x + 1) % 6`` -- so bypass lands on 0 and the modes below
-# read one higher than the output mode they select.  Both spellings are live at
-# once: _DVMODE is written shifted, _DV_OUTPUT is read unshifted.
-_MODE_BYPASS     = "0"   # AMDV_OUTPUT_MODE_BYPASS, i.e. the source untouched
-_MODE_DV_IPT     = "1"   # AMDV_OUTPUT_MODE_IPT, Dolby Vision for Player-LED
-_MODE_DV_TUNNEL  = "2"   # AMDV_OUTPUT_MODE_IPT_TUNNEL, DV for TV-LED
-_MODE_HDR10      = "3"
-_MODE_SDR10      = "4"
-_MODE_SDR8       = "5"
+# On this kernel there is one mode node, read and written with the enum
+# unshifted -- the same node and the same values Kodi uses.
+_MODE_BYPASS     = "5"   # DOLBY_VISION_OUTPUT_MODE_BYPASS, i.e. the source untouched
+_MODE_DV_IPT     = "0"   # DOLBY_VISION_OUTPUT_MODE_IPT, Dolby Vision for Player-LED
+_MODE_DV_TUNNEL  = "1"   # DOLBY_VISION_OUTPUT_MODE_IPT_TUNNEL, DV for TV-LED
+_MODE_HDR10      = "2"
+_MODE_SDR10      = "3"
+_MODE_SDR8       = "4"
 
 # How long the driver gets to pick up a mode change before the switch is taken
 # to have stayed on the same side of the Dolby Vision line.
@@ -96,22 +95,6 @@ def _read(path: str):
         return None
 
 
-def _dv_state():
-    """Snapshot the DV driver nodes, used to tell whether a native action took."""
-    return (_read(_POLICY), _read(_ENABLE), _read(_DVMODE))
-
-
-def _wait_for_dv_change(before, timeout_ms: int = 500, step_ms: int = 50) -> bool:
-    """Poll the DV driver state, returning True once it differs from ``before``."""
-    waited = 0
-    while waited < timeout_ms:
-        _delay(step_ms)
-        waited += step_ms
-        if _dv_state() != before:
-            return True
-    return False
-
-
 def _dv_output_active() -> bool:
     """Return whether the driver is currently sending Dolby Vision."""
     return _read(_DV_OUTPUT) in _DV_OUTPUT_MODES
@@ -134,11 +117,16 @@ def _wait_for_dv_output_change(
 
 
 def _is_playing_video() -> bool:
-    """True when a video is playing, i.e. when native VS10 actions can apply."""
+    """True when a video is playing, i.e. when native VS10 actions can apply.
+
+    Fails CLOSED.  This gates the sysfs sequence, and "assume playing" only ever
+    suppresses a raw write; assuming idle would let one through while a title is
+    on screen, which is the two-writers case that took the video layer down.
+    """
     try:
         return xbmc.Player().isPlayingVideo()
     except Exception:
-        return False
+        return True
 
 
 def _reset_display_on_dv_change(name: str, dv_before: bool) -> None:
@@ -305,11 +293,10 @@ _DV_MODES = ("dv", "original_dv")
 # of the sysfs sequences above, which are then skipped entirely.
 #
 # Only four actions exist, and vs10.sdr is hard-wired to SDR10 output
-# (DOLBY_VISION_OUTPUT_MODE_SDR10, dv_mode 4). There is NO action for SDR8
-# output (DOLBY_VISION_OUTPUT_MODE_SDR8, dv_mode 5), so 'sdr8' has no native
-# entry here on purpose: it always takes the sysfs path, which writes dv_mode 5
-# -- the exact same state the native engine uses for SDR8. That keeps a real
-# distinction between 8-bit and 10-bit SDR output.
+# (DOLBY_VISION_OUTPUT_MODE_SDR10, mode 3). There is no action for SDR8 output
+# (mode 4), so 'sdr8' takes vs10.sdr during playback: SDR10 is the closest
+# native mode, and the menu entry is labelled generically "-> SDR". The sysfs
+# path, used when nothing is playing, still writes the true mode 4.
 _VS10_ACTION = {
     "original_sdr": "vs10.original",
     "original_hdr": "vs10.original",
@@ -318,6 +305,7 @@ _VS10_ACTION = {
     "dv":           "vs10.dv",
     "hdr10":        "vs10.hdr10",
     "sdr10":        "vs10.sdr",
+    "sdr8":         "vs10.sdr",
 }
 
 
@@ -352,7 +340,7 @@ def _vs10_actions_available() -> bool:
         if _vs10_actions:
             xbmc.log(
                 "TinyPPI: native VS10 Actions available -> preferred during "
-                "playback, with sysfs fallback if they don't take effect",
+                "playback; sysfs is used only when nothing is playing",
                 xbmc.LOGINFO,
             )
         else:
@@ -368,13 +356,15 @@ def _probe_dv_Player_LED_setting():
     """Return the configured Dolby Vision LED mode, or None when it cannot be
     read.
 
-    ``coreelec.amlogic.dolbyvisionled`` is CoreELEC's own
-    ``AML_DISPLAY_DV_LED``: 0 is TV-LED, 1 Player-LED.  Unlike
+    ``coreelec.amlogic.dolbyvision.type`` is this fork's DV_TYPE
+    (AMLUtils.h): 0 DISPLAY_LED (TV-LED), 1 PLAYER_LED_LLDV, 2 PLAYER_LED_HDR,
+    3 VS10_ONLY, 4 PLAYER_LED_HDR2.  ``coreelec.amlogic.dolbyvisionled`` is a
+    CoreELEC 22 spelling and does not exist here -- probing it returned
+    "Invalid params" every time, so this always fell through to the driver's
+    ll_policy, which holds a stale value after a non-DV title.  Unlike
     ``_probe_vs10_actions``, which asks whether a setting is there at all, this
-    one has to read what it says -- the setting exists on every build that can
-    do either end, so its presence alone answers nothing.  Going by presence put
-    a TV-LED box on the Player-LED output, where the picture went out SDR
-    BT.2020nc.
+    one has to read what it says.  Going by presence put a TV-LED box on the
+    Player-LED output, where the picture went out SDR BT.2020nc.
 
     None, not False, when the value does not arrive: not knowing is not the same
     as TV-LED, and the caller has somewhere else to ask.
@@ -384,7 +374,7 @@ def _probe_dv_Player_LED_setting():
             "jsonrpc": "2.0",
             "id": 1,
             "method": "Settings.GetSettingValue",
-            "params": {"setting": "coreelec.amlogic.dolbyvisionled"},
+            "params": {"setting": "coreelec.amlogic.dolbyvision.type"},
         }
     )
     try:
@@ -418,7 +408,7 @@ def _player_led_mode() -> bool:
     """
     setting = _probe_dv_Player_LED_setting()
     if setting is not None:
-        return setting != 0
+        return setting in (1, 2, 4)
 
     ll_policy = _read(_LL_POLICY)
     if ll_policy is not None:
@@ -480,48 +470,56 @@ def set_mode(name: str) -> None:
 
 
 def _apply_mode(name: str) -> None:
-    """Switch the VS10 output to ``name``, preferring the native actions.
+    """Switch the VS10 output to ``name`` the way the skin's VS10 buttons do.
 
-    The native ``vs10.*`` actions only do anything during playback and can
-    still silently no-op, so we try them only then and verify the DV driver
-    state actually moved; either failure falls back to the built-in sysfs
-    sequence, which always works.
+    During playback the native ``vs10.*`` action is the whole mechanism, not a
+    preferred route to the same place.  It is the same ACTION_VS10_* the skin
+    fires, handled in CVideoPlayer::OnAction, which calls aml_dv_set_vs10_mode()
+    with the playing stream's HDR type -- and that type is the part no sysfs
+    write can supply.  The skin sends the action and trusts it; so do we.
+
+    There is no verify-and-fall-back here on purpose.  Judging the action by
+    whether the driver nodes moved cannot tell "correctly did nothing" from
+    "failed": asking for the mode already in effect moves nothing, and the
+    fallback then wrote policy, enable and mode underneath a running Kodi.  Two
+    writers on the Dolby Vision core is what took the video layer down.  An
+    action that no-ops now does what the skin's button does in the same case:
+    nothing.
+
+    The sysfs sequence is kept for the one case the action cannot serve --
+    nothing playing, where there is no CVideoPlayer to take it and no
+    transition to collide with.
     """
-    sysfs = _MODES[name]
     action = _VS10_ACTION.get(name)
-    if action and _vs10_actions_available():
-        if _is_playing_video():
-            before = _dv_state()
-            xbmc.executebuiltin(f"Action({action})")
-            if _wait_for_dv_change(before):
-                xbmc.log(
-                    f"TinyPPI: mode '{name}' set via VS10 Actions -> "
-                    f"Action({action})",
-                    xbmc.LOGINFO,
-                )
-                return
+    if _is_playing_video():
+        if not (action and _vs10_actions_available()):
             xbmc.log(
-                f"TinyPPI: VS10 Action({action}) had no effect on the DV "
-                "driver -> falling back to built-in TinyPPI VS10 (sysfs)",
+                f"TinyPPI: '{name}' not applied -- no native VS10 action is "
+                "available for it, and the sysfs sequence must never run "
+                "during playback: two writers on the Dolby Vision core is what "
+                "took the video layer down",
                 xbmc.LOGWARNING,
             )
-        else:
+            return
+        if not xbmc.getCondVisibility("Window.IsActive(fullscreenvideo)"):
             xbmc.log(
-                f"TinyPPI: no video playing -> VS10 Action({action}) cannot "
-                f"apply; using built-in TinyPPI VS10 (sysfs) for '{name}'",
-                xbmc.LOGINFO,
+                f"TinyPPI: '{name}' not applied -- Action({action}) is only "
+                "delivered to the player from fullscreen video "
+                "(Application.cpp gates it), and driving sysfs during playback "
+                "is what took the video layer down",
+                xbmc.LOGWARNING,
             )
-    elif _vs10_actions_available():
-        # Native engine is present but this mode has no native action (e.g.
-        # 'sdr8' -- the actions only expose SDR10, not SDR8). Use sysfs so the
-        # real 8-bit vs 10-bit SDR distinction is preserved.
+            return
+        xbmc.executebuiltin(f"Action({action})")
         xbmc.log(
-            f"TinyPPI: '{name}' has no native VS10 action -> using built-in "
-            "TinyPPI VS10 (sysfs) to keep the exact output",
+            f"TinyPPI: mode '{name}' requested via VS10 Action({action}) -- "
+            "sent, not confirmed; Kodi may decline it (already converting, "
+            "VS10-only display, HDR10+ source or software decode)",
             xbmc.LOGINFO,
         )
+        return
 
-    sysfs()
+    _MODES[name]()
     xbmc.log(
         f"TinyPPI: mode '{name}' set via built-in TinyPPI VS10 (sysfs)",
         xbmc.LOGINFO,

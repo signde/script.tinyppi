@@ -166,7 +166,7 @@ def _preflight(home, player, toggle_log: str) -> bool:
             _notify_error(32017)
             return False
 
-        if major_version < 22:
+        if major_version < 21:
             _notify_error(32016)
             return False
 
@@ -610,7 +610,7 @@ def open_tinyppi() -> None:
     over to the metadata view and Back hands back, so this runs until one of
     them is closed for good rather than handing over to the other.
 
-    Skips silently on non-CoreELEC (unless ``_ALLOW_NON_COREELEC``), Kodi < 22,
+    Skips silently on non-CoreELEC (unless ``_ALLOW_NON_COREELEC``), Kodi < 21,
     a 720p skin, no fullscreen video, or nothing playing; toggle-closes when the
     overlay is already open.
     """

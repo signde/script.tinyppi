@@ -48,8 +48,8 @@ msgid "Color gamut"
 msgstr "نطاق الألوان"
 
 msgctxt "#32016"
-msgid "Only CoreELEC 22 or later is supported"
-msgstr "يُدعم فقط CoreELEC 22 أو أحدث"
+msgid "Only CoreELEC 21 or later is supported"
+msgstr "يُدعم فقط CoreELEC 21 أو أحدث"
 
 msgctxt "#32017"
 msgid "The CoreELEC version could not be detected"
