@@ -20,7 +20,7 @@ msgid "General"
 msgstr ""
 
 msgctxt "#32003"
-msgid "TinyPPI settings"
+msgid "signde PPI settings"
 msgstr ""
 
 msgctxt "#32005"
@@ -64,7 +64,7 @@ msgid "Show file name"
 msgstr ""
 
 msgctxt "#32021"
-msgid "Show the currently playing file name in TinyPPI."
+msgid "Show the currently playing file name in signde PPI."
 msgstr ""
 
 msgctxt "#32022"
@@ -176,7 +176,7 @@ msgid "Choose what opens when the add-on is launched."
 msgstr ""
 
 msgctxt "#32094"
-msgid "TinyPPI"
+msgid "signde PPI"
 msgstr ""
 
 msgctxt "#32095"
@@ -188,7 +188,7 @@ msgid "Bit depth"
 msgstr ""
 
 msgctxt "#32101"
-msgid "Customise the TinyPPI overlay colors."
+msgid "Customise the signde PPI overlay colors."
 msgstr ""
 
 msgctxt "#32103"
@@ -964,11 +964,11 @@ msgid "Color and transparency of the audio format logo."
 msgstr ""
 
 msgctxt "#32319"
-msgid "Show codec logos in the TinyPPI overlay"
+msgid "Show codec logos in the signde PPI overlay"
 msgstr ""
 
 msgctxt "#32320"
-msgid "Also shows the format logos while the TinyPPI info overlay is open."
+msgid "Also shows the format logos while the signde PPI info overlay is open."
 msgstr ""
 
 msgctxt "#32321"
@@ -996,7 +996,7 @@ msgid "Video OSD"
 msgstr ""
 
 msgctxt "#32327"
-msgid "TinyPPI overlay"
+msgid "signde PPI overlay"
 msgstr ""
 
 msgctxt "#32328"
@@ -1040,7 +1040,7 @@ msgid "Auto-hide"
 msgstr ""
 
 msgctxt "#32345"
-msgid "Automatically hides the TinyPPI overlay after the selected time (in seconds). 0 = off. Does not apply to the VS10 dialog."
+msgid "Automatically hides the signde PPI overlay after the selected time (in seconds). 0 = off. Does not apply to the VS10 dialog."
 msgstr ""
 
 msgctxt "#32348"
@@ -1120,7 +1120,7 @@ msgid "FEL indicator"
 msgstr ""
 
 msgctxt "#32370"
-msgid "Color of the pill shown at the bottom of the splash logo when the source is Dolby Vision FEL."
+msgid "Color of the pill shown on the splash logo when the source is Dolby Vision FEL."
 msgstr ""
 
 msgctxt "#32371"
@@ -1128,7 +1128,7 @@ msgid "MEL indicator"
 msgstr ""
 
 msgctxt "#32372"
-msgid "Color of the pill shown at the bottom of the splash logo when the source is Dolby Vision MEL."
+msgid "Color of the pill shown on the splash logo when the source is Dolby Vision MEL."
 msgstr ""
 
 msgctxt "#32373"
@@ -1136,7 +1136,7 @@ msgid "Other Dolby Vision"
 msgstr ""
 
 msgctxt "#32374"
-msgid "Color of the pill shown at the bottom of the splash logo for any other Dolby Vision profile (no enhancement layer)."
+msgid "Color of the pill shown on the splash logo for any other Dolby Vision profile (no enhancement layer)."
 msgstr ""
 
 msgctxt "#32375"
@@ -1187,30 +1187,6 @@ msgctxt "#32388"
 msgid "Display"
 msgstr ""
 
-msgctxt "#32389"
-msgid "Dolby Vision metadata"
-msgstr ""
-
-msgctxt "#32390"
-msgid "OK: open section — Back: TinyPPI overlay"
-msgstr ""
-
-msgctxt "#32391"
-msgid "DV metadata"
-msgstr ""
-
-msgctxt "#32392"
-msgid "Diagnostic views for reading what a stream actually carries."
-msgstr ""
-
-msgctxt "#32393"
-msgid "Dolby Vision metadata view"
-msgstr ""
-
-msgctxt "#32394"
-msgid "Lets OK open the Dolby Vision metadata view while the TinyPPI overlay is up and a Dolby Vision source is playing. It lists every block the stream's side data carries — the configuration record, the RPU from its header through L11, the trim passes and the static SEIs. OK opens the section under the cursor in a window of its own, Back returns to the TinyPPI overlay. On any other source OK does nothing."
-msgstr ""
-
 msgctxt "#32395"
 msgid "Changed values"
 msgstr ""
@@ -1228,79 +1204,7 @@ msgid "Move with the arrow keys"
 msgstr ""
 
 msgctxt "#32399"
-msgid "Lets the arrow keys on the remote move the TinyPPI overlay around the screen while it is open. The move is not saved: the next launch starts from the position configured above."
-msgstr ""
-
-msgctxt "#32401"
-msgid "Color laid over the whole screen behind the Dolby Vision metadata view. Raise its opacity to dim the picture behind it."
-msgstr ""
-
-msgctxt "#32403"
-msgid "Background color of the metadata view itself."
-msgstr ""
-
-msgctxt "#32405"
-msgid "Color of the heading at the top of the metadata view."
-msgstr ""
-
-msgctxt "#32407"
-msgid "Color of the Dolby Vision logo in the top right corner."
-msgstr ""
-
-msgctxt "#32409"
-msgid "Color of the section headings, such as RPU or L2 — Trims."
-msgstr ""
-
-msgctxt "#32410"
-msgid "Column headings"
-msgstr ""
-
-msgctxt "#32411"
-msgid "Color of the column headings in the trim tables: Slope, Offset, Power and the rest."
-msgstr ""
-
-msgctxt "#32413"
-msgid "Color of the field names down the left column."
-msgstr ""
-
-msgctxt "#32415"
-msgid "Color of the readings. A value that just changed is written in the \"Changed values\" color instead, for as long as it keeps changing."
-msgstr ""
-
-msgctxt "#32417"
-msgid "Color of the rules under the section headings and above and below the list."
-msgstr ""
-
-msgctxt "#32419"
-msgid "Color of the bar behind the row the selection is on."
-msgstr ""
-
-msgctxt "#32420"
-msgid "Scrollbar"
-msgstr ""
-
-msgctxt "#32421"
-msgid "Color of the scrollbar down the right-hand edge."
-msgstr ""
-
-msgctxt "#32422"
-msgid "Key hint"
-msgstr ""
-
-msgctxt "#32423"
-msgid "Color of the line at the bottom naming what the keys do."
-msgstr ""
-
-msgctxt "#32424"
-msgid "Back: metadata list"
-msgstr ""
-
-msgctxt "#32425"
-msgid "RPU MDL"
-msgstr ""
-
-msgctxt "#32426"
-msgid "RPU MaxCLL/FALL"
+msgid "Lets the arrow keys on the remote move the signde PPI overlay around the screen while it is open. The move is not saved: the next launch starts from the position configured above."
 msgstr ""
 
 msgctxt "#32427"
@@ -1313,174 +1217,6 @@ msgstr ""
 
 msgctxt "#32429"
 msgid "Input"
-msgstr ""
-
-msgctxt "#32430"
-msgid "Dashboard"
-msgstr ""
-
-msgctxt "#32431"
-msgid "A live view of the playing stream in a browser on your phone or laptop, so the picture itself stays untouched."
-msgstr ""
-
-msgctxt "#32432"
-msgid "Enable web dashboard"
-msgstr ""
-
-msgctxt "#32433"
-msgid "Serves the dashboard on this box's own address. Off by default; once it is on, anything on the same network can reach it, so do not forward its port to the internet."
-msgstr ""
-
-msgctxt "#32434"
-msgid "Port"
-msgstr ""
-
-msgctxt "#32435"
-msgid "The port the dashboard listens on. Leave 8080 alone - Kodi's own web server usually has it."
-msgstr ""
-
-msgctxt "#32436"
-msgid "Access token"
-msgstr ""
-
-msgctxt "#32437"
-msgid "The key the dashboard asks for. Switching a VS10 mode from the browser always needs it; reading needs it only when the setting below says so."
-msgstr ""
-
-msgctxt "#32438"
-msgid "Generate a new token"
-msgstr ""
-
-msgctxt "#32439"
-msgid "Replaces the token with a fresh one. Every browser still holding the old one is logged out."
-msgstr ""
-
-msgctxt "#32440"
-msgid "Require the token for reading too"
-msgstr ""
-
-msgctxt "#32441"
-msgid "Asks for the token before showing anything at all, not just before switching a mode. Turn this on when the box is on a shared network."
-msgstr ""
-
-msgctxt "#32442"
-msgid "Allow VS10 switching from the dashboard"
-msgstr ""
-
-msgctxt "#32443"
-msgid "Shows the VS10 output modes for the playing source in the browser, so the mode can be switched from a phone. The token is required either way."
-msgstr ""
-
-msgctxt "#32444"
-msgid "Show address and token"
-msgstr ""
-
-msgctxt "#32445"
-msgid "Shows the address to open in a browser, together with the current token."
-msgstr ""
-
-msgctxt "#32446"
-msgid "Web dashboard"
-msgstr ""
-
-msgctxt "#32447"
-msgid "Open this address in a browser on the same network:"
-msgstr ""
-
-msgctxt "#32448"
-msgid "Connected"
-msgstr ""
-
-msgctxt "#32449"
-msgid "Connecting..."
-msgstr ""
-
-msgctxt "#32450"
-msgid "Disconnected"
-msgstr ""
-
-msgctxt "#32451"
-msgid "Nothing is playing"
-msgstr ""
-
-msgctxt "#32452"
-msgid "Start a video on the box and everything it carries appears here."
-msgstr ""
-
-msgctxt "#32453"
-msgid "Peak"
-msgstr ""
-
-msgctxt "#32454"
-msgid "Average"
-msgstr ""
-
-msgctxt "#32455"
-msgid "Frame luminance (L1)"
-msgstr ""
-
-msgctxt "#32456"
-msgid "Copy report"
-msgstr ""
-
-msgctxt "#32457"
-msgid "Copied"
-msgstr ""
-
-msgctxt "#32459"
-msgid "Enter the access token"
-msgstr ""
-
-msgctxt "#32460"
-msgid "You will find it in the add-on settings under Dashboard."
-msgstr ""
-
-msgctxt "#32461"
-msgid "Save"
-msgstr ""
-
-msgctxt "#32462"
-msgid "Cancel"
-msgstr ""
-
-msgctxt "#32463"
-msgid "Wrong or missing token"
-msgstr ""
-
-msgctxt "#32464"
-msgid "Switching..."
-msgstr ""
-
-msgctxt "#32465"
-msgid "Switched"
-msgstr ""
-
-msgctxt "#32466"
-msgid "Switching failed"
-msgstr ""
-
-msgctxt "#32467"
-msgid "VS10 output"
-msgstr ""
-
-msgctxt "#32468"
-msgid "Show the Dolby Vision metadata view"
-msgstr ""
-
-msgctxt "#32469"
-msgid "Adds the full metadata list to the dashboard - every block the stream's side data carries, the same one the on-screen view shows. It is only built for a Dolby Vision source, and it is the largest thing the page sends, so turn it off on a slow network."
-msgstr ""
-
-msgctxt "#32470"
-msgid "No Dolby Vision metadata"
-msgstr ""
-
-msgctxt "#32471"
-msgid "This source carries no Dolby Vision RPU, so there is no metadata to list. The window fills as soon as a Dolby Vision title starts."
-msgstr ""
-
-msgctxt "#32472"
-msgid "Dolby Vision"
 msgstr ""
 
 msgctxt "#32476"
@@ -1621,4 +1357,117 @@ msgstr ""
 
 msgctxt "#32514"
 msgid "Warnings"
+msgstr ""
+
+msgctxt "#32520"
+msgid "Letterbox offset"
+msgstr ""
+
+msgctxt "#32521"
+msgid "Codec"
+msgstr ""
+
+msgctxt "#32522"
+msgid "Deinterlacing"
+msgstr ""
+
+msgctxt "#32523"
+msgid "VS10 / VP mode"
+msgstr ""
+
+msgctxt "#32524"
+msgid "VS10 status"
+msgstr ""
+
+msgctxt "#32525"
+msgid "EOTF & Gamut"
+msgstr ""
+
+msgctxt "#32526"
+msgid "Color space"
+msgstr ""
+
+msgctxt "#32527"
+msgid "Objects"
+msgstr ""
+
+msgctxt "#32528"
+msgid "Dialog normalization"
+msgstr ""
+
+msgctxt "#32529"
+msgid "AML FPS"
+msgstr ""
+
+msgctxt "#32530"
+msgid "Video queue"
+msgstr ""
+
+msgctxt "#32531"
+msgid "Video queue data"
+msgstr ""
+
+msgctxt "#32532"
+msgid "Audio queue"
+msgstr ""
+
+msgctxt "#32533"
+msgid "Audio queue data"
+msgstr ""
+
+msgctxt "#32534"
+msgid "Level"
+msgstr ""
+
+msgctxt "#32535"
+msgid "Source Min/Max"
+msgstr ""
+
+msgctxt "#32536"
+msgid "Source PQ"
+msgstr ""
+
+msgctxt "#32537"
+msgid "Video mode"
+msgstr ""
+
+msgctxt "#32538"
+msgid "Output format"
+msgstr ""
+
+
+msgctxt "#32539"
+msgid "Player Process Info mode"
+msgstr ""
+
+msgctxt "#32540"
+msgid "Choose the background style used by Player Process Info."
+msgstr ""
+
+msgctxt "#32541"
+msgid "Classic"
+msgstr ""
+
+msgctxt "#32542"
+msgid "Modern"
+msgstr ""
+
+msgctxt "#32543"
+msgid "Dolby Vision indicator position"
+msgstr ""
+
+msgctxt "#32544"
+msgid "Place the Dolby Vision layer indicator above the video logo or below the audio logo."
+msgstr ""
+
+msgctxt "#32545"
+msgid "Bottom"
+msgstr ""
+
+msgctxt "#32546"
+msgid "Top"
+msgstr ""
+
+msgctxt "#32547"
+msgid "Decoded output"
 msgstr ""
