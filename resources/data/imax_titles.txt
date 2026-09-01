@@ -22,7 +22,7 @@
 #
 # A file with the same name in the addon's profile folder is read as well and
 # survives addon updates:
-#   .kodi/userdata/addon_data/script.tinyppi/imax_titles.txt
+#   .kodi/userdata/addon_data/script.signde.tinyppi/imax_titles.txt
 # Put your own additions there rather than editing this list.
 #
 # A release with IMAX in its filename is recognised without being listed here.

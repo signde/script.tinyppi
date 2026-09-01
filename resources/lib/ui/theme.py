@@ -2,7 +2,7 @@
 
 Maps the user's color settings onto ARGB hex strings and publishes them as
 Home-window (10000) properties, consumed by the skin via
-``$INFO[Window(10000).Property(TinyPPI.<Name>Color)]``.
+``$INFO[Window(10000).Property(SigndeTinyPPI.<Name>Color)]``.
 """
 
 import json
@@ -165,7 +165,6 @@ _DEFAULT_COLOR_INDEX = {
     "fel_color":         "34",  # Forest
     "mel_color":         "31",  # Tangerine
     "output_changed_color": "7",  # Light blue
-    "metadata_changed_color": "7",  # Light blue
     "splash_start_convert_dot_color":   "34",  # Forest
     "splash_osd_convert_dot_color":     "34",  # Forest
     "splash_tinyppi_convert_dot_color": "34",  # Forest
@@ -179,7 +178,7 @@ _DEFAULT_COLOR_INDEX = {
 
 # Custom HEX colors (8-digit ARGB), keyed by setting id, persisted as JSON in
 # the add-on profile directory.
-_CUSTOM_FILE = "special://profile/addon_data/script.tinyppi/custom_colors.json"
+_CUSTOM_FILE = "special://profile/addon_data/script.signde.tinyppi/custom_colors.json"
 
 # Alpha prepended to a 6-digit custom HEX, keyed by setting id (default FF).
 _CUSTOM_ALPHA = {
@@ -192,11 +191,6 @@ _CUSTOM_ALPHA = {
     "accent_color":            "B3",  # dimmed detail accents (~70%)
     "line_color":              "26",  # faint separator lines (~15%)
     "dialog_line_color":       "26",  # faint VS10 dialog separator lines (~15%)
-    # The metadata view's own shades, matching the elements they stand in for.
-    "metadata_global_background_color": "FA",
-    "metadata_background_color":        "FA",
-    "metadata_line_color":              "26",
-    "metadata_focus_color":             "26",
 }
 _DEFAULT_ALPHA = "FF"
 
@@ -291,10 +285,6 @@ _DEFAULT_OPACITIES = {
     "channel_layout_color":     33,  # 54 – speaker layout graphic
     "accent_color":            70,  # B3 – dimmed inline detail accents
     "line_color":              15,  # 26 – faint separator lines
-    "metadata_global_background_color": 0,
-    "metadata_background_color":    98,
-    "metadata_line_color":          15,
-    "metadata_focus_color":         15,
     "dialog_line_color":       15,  # 26 – faint VS10 dialog separator lines
     # Per-context codec-logo panel (FA – Charcoal) and divider (59 – faint).
     "splash_start_bg_color":        98,
@@ -355,91 +345,72 @@ def _resolve(palette: tuple, addon, setting_id: str, custom: dict, overrides=Non
         return _pick(palette, _DEFAULT_COLOR_INDEX.get(setting_id, "0"))
     if not value:
         # Unset -- a setting newer than the profile that stores it.  Reads as
-        # the default settings.xml gives it rather than as palette index 0,
-        # which for a text color is white: the metadata view's highlight would
-        # come out the same color as the values it has to stand out from.
+        # the default settings.xml gives it rather than as palette index 0.
         value = _DEFAULT_COLOR_INDEX.get(setting_id, "0")
     return _pick(palette, value)
 
 
 _THEME_PROPERTIES = (
-    ("TinyPPI.TitleColor",            _TEXT_COLORS, "title_color"),
-    ("TinyPPI.FilenameColor",         _TEXT_COLORS, "filename_color"),
-    ("TinyPPI.IconColor",             _TEXT_COLORS, "icon_color"),
-    ("TinyPPI.HeaderColor",           _TEXT_COLORS, "header_color"),
-    ("TinyPPI.HeaderIconColor",       _TEXT_COLORS, "header_icon_color"),
-    ("TinyPPI.DescriptionColor",      _TEXT_COLORS, "description_color"),
-    ("TinyPPI.OutputColor",           _TEXT_COLORS, "output_color"),
-    ("TinyPPI.OutputChangedColor",    _TEXT_COLORS, "output_changed_color"),
-    ("TinyPPI.ProgressColor",         _TEXT_COLORS, "progress_color"),
-    ("TinyPPI.FpsColor",              _TEXT_COLORS, "fps_color"),
-    ("TinyPPI.UnitColor",             _TEXT_COLORS, "unit_color"),
-    ("TinyPPI.AccentColor",           _ACCENT_COLORS, "accent_color"),
-    ("TinyPPI.ConvertYesColor",       _TEXT_COLORS, "convert_yes_color"),
-    ("TinyPPI.ConvertNoColor",        _TEXT_COLORS, "convert_no_color"),
-    ("TinyPPI.FelColor",              _TEXT_COLORS, "fel_color"),
-    ("TinyPPI.MelColor",              _TEXT_COLORS, "mel_color"),
-    ("TinyPPI.BackgroundColor",       _BACKGROUND_COLORS, "background_color"),
-    ("TinyPPI.DialogBackgroundColor", _BACKGROUND_COLORS, "dialog_background_color"),
-    ("TinyPPI.DialogGlobalBackgroundColor", _BACKGROUND_COLORS, "dialog_global_background_color"),
-    ("TinyPPI.GlobalBackgroundColor", _BACKGROUND_COLORS, "global_background_color"),
+    ("SigndeTinyPPI.TitleColor",            _TEXT_COLORS, "title_color"),
+    ("SigndeTinyPPI.FilenameColor",         _TEXT_COLORS, "filename_color"),
+    ("SigndeTinyPPI.IconColor",             _TEXT_COLORS, "icon_color"),
+    ("SigndeTinyPPI.HeaderColor",           _TEXT_COLORS, "header_color"),
+    ("SigndeTinyPPI.HeaderIconColor",       _TEXT_COLORS, "header_icon_color"),
+    ("SigndeTinyPPI.DescriptionColor",      _TEXT_COLORS, "description_color"),
+    ("SigndeTinyPPI.OutputColor",           _TEXT_COLORS, "output_color"),
+    ("SigndeTinyPPI.OutputChangedColor",    _TEXT_COLORS, "output_changed_color"),
+    ("SigndeTinyPPI.ProgressColor",         _TEXT_COLORS, "progress_color"),
+    ("SigndeTinyPPI.FpsColor",              _TEXT_COLORS, "fps_color"),
+    ("SigndeTinyPPI.UnitColor",             _TEXT_COLORS, "unit_color"),
+    ("SigndeTinyPPI.AccentColor",           _ACCENT_COLORS, "accent_color"),
+    ("SigndeTinyPPI.ConvertYesColor",       _TEXT_COLORS, "convert_yes_color"),
+    ("SigndeTinyPPI.ConvertNoColor",        _TEXT_COLORS, "convert_no_color"),
+    ("SigndeTinyPPI.FelColor",              _TEXT_COLORS, "fel_color"),
+    ("SigndeTinyPPI.MelColor",              _TEXT_COLORS, "mel_color"),
+    ("SigndeTinyPPI.BackgroundColor",       _BACKGROUND_COLORS, "background_color"),
+    ("SigndeTinyPPI.DialogBackgroundColor", _BACKGROUND_COLORS, "dialog_background_color"),
+    ("SigndeTinyPPI.DialogGlobalBackgroundColor", _BACKGROUND_COLORS, "dialog_global_background_color"),
+    ("SigndeTinyPPI.GlobalBackgroundColor", _BACKGROUND_COLORS, "global_background_color"),
     # Codec logos: an independent bg / video / audio / divider colour per context
     # (playback start, video OSD, TinyPPI overlay).
-    ("TinyPPI.SplashStartBgColor",        _BACKGROUND_COLORS, "splash_start_bg_color"),
-    ("TinyPPI.SplashStartVideoColor",     _TEXT_COLORS,       "splash_start_video_color"),
-    ("TinyPPI.SplashStartAudioColor",     _TEXT_COLORS,       "splash_start_audio_color"),
-    ("TinyPPI.SplashStartDividerColor",   _TEXT_COLORS,       "splash_start_divider_color"),
-    ("TinyPPI.SplashStartConvertDotColor", _TEXT_COLORS,      "splash_start_convert_dot_color"),
+    ("SigndeTinyPPI.SplashStartBgColor",        _BACKGROUND_COLORS, "splash_start_bg_color"),
+    ("SigndeTinyPPI.SplashStartVideoColor",     _TEXT_COLORS,       "splash_start_video_color"),
+    ("SigndeTinyPPI.SplashStartAudioColor",     _TEXT_COLORS,       "splash_start_audio_color"),
+    ("SigndeTinyPPI.SplashStartDividerColor",   _TEXT_COLORS,       "splash_start_divider_color"),
+    ("SigndeTinyPPI.SplashStartConvertDotColor", _TEXT_COLORS,      "splash_start_convert_dot_color"),
     # Dolby Vision layer-indicator pill: one colour per FEL / MEL / other-profile
     # bucket, independent per context like the rest of the codec-logo tints.
-    ("TinyPPI.SplashStartFelColor", _TEXT_COLORS, "splash_start_fel_color"),
-    ("TinyPPI.SplashStartMelColor", _TEXT_COLORS, "splash_start_mel_color"),
-    ("TinyPPI.SplashStartDvColor",  _TEXT_COLORS, "splash_start_dv_color"),
-    ("TinyPPI.SplashOsdBgColor",          _BACKGROUND_COLORS, "splash_osd_bg_color"),
-    ("TinyPPI.SplashOsdVideoColor",       _TEXT_COLORS,       "splash_osd_video_color"),
-    ("TinyPPI.SplashOsdAudioColor",       _TEXT_COLORS,       "splash_osd_audio_color"),
-    ("TinyPPI.SplashOsdDividerColor",     _TEXT_COLORS,       "splash_osd_divider_color"),
-    ("TinyPPI.SplashOsdConvertDotColor",  _TEXT_COLORS,       "splash_osd_convert_dot_color"),
-    ("TinyPPI.SplashOsdFelColor", _TEXT_COLORS, "splash_osd_fel_color"),
-    ("TinyPPI.SplashOsdMelColor", _TEXT_COLORS, "splash_osd_mel_color"),
-    ("TinyPPI.SplashOsdDvColor",  _TEXT_COLORS, "splash_osd_dv_color"),
-    ("TinyPPI.SplashTinyppiBgColor",      _BACKGROUND_COLORS, "splash_tinyppi_bg_color"),
-    ("TinyPPI.SplashTinyppiVideoColor",   _TEXT_COLORS,       "splash_tinyppi_video_color"),
-    ("TinyPPI.SplashTinyppiAudioColor",   _TEXT_COLORS,       "splash_tinyppi_audio_color"),
-    ("TinyPPI.SplashTinyppiDividerColor", _TEXT_COLORS,       "splash_tinyppi_divider_color"),
-    ("TinyPPI.SplashTinyppiConvertDotColor", _TEXT_COLORS,    "splash_tinyppi_convert_dot_color"),
-    ("TinyPPI.SplashTinyppiFelColor", _TEXT_COLORS, "splash_tinyppi_fel_color"),
-    ("TinyPPI.SplashTinyppiMelColor", _TEXT_COLORS, "splash_tinyppi_mel_color"),
-    ("TinyPPI.SplashTinyppiDvColor",  _TEXT_COLORS, "splash_tinyppi_dv_color"),
+    ("SigndeTinyPPI.SplashStartFelColor", _TEXT_COLORS, "splash_start_fel_color"),
+    ("SigndeTinyPPI.SplashStartMelColor", _TEXT_COLORS, "splash_start_mel_color"),
+    ("SigndeTinyPPI.SplashStartDvColor",  _TEXT_COLORS, "splash_start_dv_color"),
+    ("SigndeTinyPPI.SplashOsdBgColor",          _BACKGROUND_COLORS, "splash_osd_bg_color"),
+    ("SigndeTinyPPI.SplashOsdVideoColor",       _TEXT_COLORS,       "splash_osd_video_color"),
+    ("SigndeTinyPPI.SplashOsdAudioColor",       _TEXT_COLORS,       "splash_osd_audio_color"),
+    ("SigndeTinyPPI.SplashOsdDividerColor",     _TEXT_COLORS,       "splash_osd_divider_color"),
+    ("SigndeTinyPPI.SplashOsdConvertDotColor",  _TEXT_COLORS,       "splash_osd_convert_dot_color"),
+    ("SigndeTinyPPI.SplashOsdFelColor", _TEXT_COLORS, "splash_osd_fel_color"),
+    ("SigndeTinyPPI.SplashOsdMelColor", _TEXT_COLORS, "splash_osd_mel_color"),
+    ("SigndeTinyPPI.SplashOsdDvColor",  _TEXT_COLORS, "splash_osd_dv_color"),
+    ("SigndeTinyPPI.SplashTinyppiBgColor",      _BACKGROUND_COLORS, "splash_tinyppi_bg_color"),
+    ("SigndeTinyPPI.SplashTinyppiVideoColor",   _TEXT_COLORS,       "splash_tinyppi_video_color"),
+    ("SigndeTinyPPI.SplashTinyppiAudioColor",   _TEXT_COLORS,       "splash_tinyppi_audio_color"),
+    ("SigndeTinyPPI.SplashTinyppiDividerColor", _TEXT_COLORS,       "splash_tinyppi_divider_color"),
+    ("SigndeTinyPPI.SplashTinyppiConvertDotColor", _TEXT_COLORS,    "splash_tinyppi_convert_dot_color"),
+    ("SigndeTinyPPI.SplashTinyppiFelColor", _TEXT_COLORS, "splash_tinyppi_fel_color"),
+    ("SigndeTinyPPI.SplashTinyppiMelColor", _TEXT_COLORS, "splash_tinyppi_mel_color"),
+    ("SigndeTinyPPI.SplashTinyppiDvColor",  _TEXT_COLORS, "splash_tinyppi_dv_color"),
     # Channel layout: the DV panel background, the speaker layout graphic behind
     # the channels, and the active channels themselves.
-    ("TinyPPI.ChannelBackgroundColor", _BACKGROUND_COLORS, "channel_background_color"),
-    ("TinyPPI.ChannelLayoutColor",     _CHANNEL_COLORS,    "channel_layout_color"),
-    ("TinyPPI.ChannelIconColor",       _CHANNEL_COLORS,    "channel_icon_color"),
-    # Dolby Vision metadata view.  It draws nothing the overlay draws, so it
-    # carries its own colour per element rather than borrowing the overlay's:
-    # a view for reading a bitstream wants a different balance from one laid
-    # over a film.
-    ("TinyPPI.MetadataChangedColor",     _TEXT_COLORS, "metadata_changed_color"),
-    ("TinyPPI.MetadataGlobalBackgroundColor",  _BACKGROUND_COLORS, "metadata_global_background_color"),
-    ("TinyPPI.MetadataBackgroundColor",        _BACKGROUND_COLORS, "metadata_background_color"),
-    ("TinyPPI.MetadataHeaderColor",            _TEXT_COLORS, "metadata_header_color"),
-    ("TinyPPI.MetadataHeaderIconColor",        _TEXT_COLORS, "metadata_header_icon_color"),
-    ("TinyPPI.MetadataTitleColor",             _TEXT_COLORS, "metadata_title_color"),
-    ("TinyPPI.MetadataColumnColor",            _TEXT_COLORS, "metadata_column_color"),
-    ("TinyPPI.MetadataNameColor",              _TEXT_COLORS, "metadata_name_color"),
-    ("TinyPPI.MetadataValueColor",             _TEXT_COLORS, "metadata_value_color"),
-    ("TinyPPI.MetadataLineColor",              _LINE_COLORS, "metadata_line_color"),
-    ("TinyPPI.MetadataFocusColor",             _LINE_COLORS, "metadata_focus_color"),
-    ("TinyPPI.MetadataScrollbarColor",         _TEXT_COLORS, "metadata_scrollbar_color"),
-    ("TinyPPI.MetadataHintColor",              _TEXT_COLORS, "metadata_hint_color"),
-    ("TinyPPI.LineColor",             _LINE_COLORS, "line_color"),
-    ("TinyPPI.DialogHeaderColor",     _TEXT_COLORS, "dialog_header_color"),
-    ("TinyPPI.DialogHeaderIconColor", _TEXT_COLORS, "dialog_header_icon_color"),
-    ("TinyPPI.DialogLineColor",       _LINE_COLORS, "dialog_line_color"),
-    ("TinyPPI.DialogFocusColor",      _DIALOG_FOCUS_COLORS, "dialog_focus_color"),
+    ("SigndeTinyPPI.ChannelBackgroundColor", _BACKGROUND_COLORS, "channel_background_color"),
+    ("SigndeTinyPPI.ChannelLayoutColor",     _CHANNEL_COLORS,    "channel_layout_color"),
+    ("SigndeTinyPPI.ChannelIconColor",       _CHANNEL_COLORS,    "channel_icon_color"),
+    ("SigndeTinyPPI.LineColor",             _LINE_COLORS, "line_color"),
+    ("SigndeTinyPPI.DialogHeaderColor",     _TEXT_COLORS, "dialog_header_color"),
+    ("SigndeTinyPPI.DialogHeaderIconColor", _TEXT_COLORS, "dialog_header_icon_color"),
+    ("SigndeTinyPPI.DialogLineColor",       _LINE_COLORS, "dialog_line_color"),
+    ("SigndeTinyPPI.DialogFocusColor",      _DIALOG_FOCUS_COLORS, "dialog_focus_color"),
     (
-        "TinyPPI.DialogFocusTextColor",
+        "SigndeTinyPPI.DialogFocusTextColor",
         _DIALOG_FOCUS_TEXT_COLORS,
         "dialog_focus_text_color",
     ),
@@ -466,8 +437,15 @@ def apply_theme(home, addon=None, overrides=None, custom=None) -> None:
         )
         home.setProperty(property_name, alpha + value[2:])
 
+    # Classic keeps the modern data layout but replaces its rounded panel with
+    # AF3's full-screen vertical gradient. The XML hides the Modern background
+    # controls entirely rather than relying on a zero-alpha colordiffuse, which
+    # some CoreELEC render paths resolve as opaque white.
+    ppi_mode = "modern" if addon.getSettingInt("ppi_mode") == 1 else "classic"
+    home.setProperty("SigndeTinyPPI.PPIMode", ppi_mode)
+
     home.setProperty(
-        "TinyPPI.UnitLabel",
+        "SigndeTinyPPI.UnitLabel",
         _pick(_UNIT_LABELS, _setting_value(addon, "unit_type", overrides)),
     )
 
@@ -478,7 +456,7 @@ def custom_color(setting_id, addon=None) -> None:
     Valid input gets the per-setting alpha prepended, is saved to the JSON file,
     and switches the setting to the custom marker (999).  Invalid input notifies
     and falls back to the default.  Cancelling leaves the selection untouched.
-    Invoked via ``RunScript(script.tinyppi,custom_color,<id>)``.
+    Invoked via ``RunScript(script.signde.tinyppi,custom_color,<id>)``.
     """
     addon = addon or xbmcaddon.Addon()
 
