@@ -1,7 +1,7 @@
 """Start-up / OSD format-logo overlay.
 
 On ``Player.OnAVStart`` the service (monitor.py) launches this via
-``RunScript(script.tinyppi,splash)``.  It stacks two logos in a corner – the
+``RunScript(script.signde.tinyppi,splash)``.  It stacks two logos in a corner – the
 HDR/video format on top, the audio format below.  Three settings triggers decide
 when they show: ``splash_enabled`` (first ``splash_duration`` seconds),
 ``splash_show_on_osd`` (while the video OSD is open) and ``splash_show_on_tinyppi``
@@ -39,7 +39,7 @@ _HOME_WINDOW_ID         = 10000
 
 # Re-entry guard so overlapping playback starts cannot stack two controllers;
 # on the Home window because each RunScript call is a separate process.
-PROP_SPLASH_ACTIVE = "TinyPPI.SplashActive"
+PROP_SPLASH_ACTIVE = "SigndeTinyPPI.SplashActive"
 
 # ControlImage aspect-ratio modes: keep for the logos, stretch for the panel.
 _ASPECT_KEEP    = 2
@@ -53,7 +53,7 @@ _DIVIDER_COLOR  = "59FFFFFF"
 # _is_converting / PROP_CONVERTING below).
 _DOT_TEXTURE       = os.path.join("common", "dot-circle.png")
 _CONVERT_DOT_COLOR = "FF81C784"  # palette Forest
-# Dolby Vision layer-indicator pill, centred on the panel's bottom edge (see
+# Dolby Vision layer-indicator pill, centred in the selected outer padding (see
 # _dv_layer_token below).
 _PILL_TEXTURE = os.path.join("common", "pill.png")
 _CORNER_TEXTURES = {
@@ -72,9 +72,9 @@ _LOGO_COLOR = "FFEDEDED"  # near-white (leaves white logos unchanged)
 # Each context (start / osd / tinyppi) has its own bg / video / audio / divider
 # tint, so a colour change in one context does not touch the others.
 _MODE_PROP_PREFIX = {
-    "start":   "TinyPPI.SplashStart",
-    "osd":     "TinyPPI.SplashOsd",
-    "tinyppi": "TinyPPI.SplashTinyppi",
+    "start":   "SigndeTinyPPI.SplashStart",
+    "osd":     "SigndeTinyPPI.SplashOsd",
+    "tinyppi": "SigndeTinyPPI.SplashTinyppi",
 }
 _COLOR_PROP_SUFFIX = {
     "bg":          "BgColor",
@@ -106,20 +106,21 @@ class _ModeState(NamedTuple):
     colors: tuple
     condition: str
     layer_token: str
+    pill_edge: int
 
 # Fade in/out.  Kodi only plays "Visible"/"Hidden" animations on runtime-added
 # controls when a *visibility condition* changes value (setVisible() alone does
 # not), so the controls watch a global guard plus a per-mode Home-window
 # property.  External conditions (VideoOSD / TinyPPI state) can then start the
 # fades immediately once the controls have been preloaded.
-PROP_SPLASH_VISIBLE = "TinyPPI.SplashVisible"
+PROP_SPLASH_VISIBLE = "SigndeTinyPPI.SplashVisible"
 _VISIBLE_CONDITION  = (
     f"String.IsEqual(Window({_HOME_WINDOW_ID}).Property({PROP_SPLASH_VISIBLE}),true)"
 )
 _MODE_VISIBLE_PROPS = {
-    "start":   "TinyPPI.SplashStartVisible",
-    "osd":     "TinyPPI.SplashOsdVisible",
-    "tinyppi": "TinyPPI.SplashTinyPPIVisible",
+    "start":   "SigndeTinyPPI.SplashStartVisible",
+    "osd":     "SigndeTinyPPI.SplashOsdVisible",
+    "tinyppi": "SigndeTinyPPI.SplashTinyPPIVisible",
 }
 _FADE_IN_MS       = 350
 _FADE_OUT_MS      = 150
@@ -134,7 +135,7 @@ _ANIM_OUT = ("Hidden",
 # active, mirroring script-tinyppi-main.xml's check-circle condition (updated
 # every poll below; the dot's own visibleCondition ANDs this in, so Kodi shows
 # or hides it live without a control rebuild).
-PROP_CONVERTING = "TinyPPI.SplashConverting"
+PROP_CONVERTING = "SigndeTinyPPI.SplashConverting"
 
 
 def _is_converting(hdr_type: str, gamut: str) -> bool:
@@ -142,8 +143,8 @@ def _is_converting(hdr_type: str, gamut: str) -> bool:
 
     True when the Amlogic output *gamut* shows a real HDR<->Dolby Vision
     conversion (non-DV source now DV, DV/HDR source falling back to SDR, or
-    SDR/DV tone-mapped to HDR10).  *hdr_type* is the source format detected from
-    the stream's side data rather than the overlay's Home-window property, so
+    SDR/DV tone-mapped to HDR10). *hdr_type* is the source format read from the
+    CE21 player API rather than the overlay's Home-window property, so
     this works before the overlay is ever opened.  Both are read once per poll
     by the caller.
     """
@@ -173,19 +174,15 @@ _LAYER_COLOR_FALLBACK = {
 }
 
 
-def _dv_layer_token(hdr_token: str, hdr_type: str) -> str:
-    """Classify what is actually on screen into a layer-indicator pill token.
+def _dv_layer_token(hdr_type: str) -> str:
+    """Classify the source into a Dolby Vision layer-indicator pill token.
 
-    Driven by the real Amlogic output (*hdr_token*), not the source
-    (*hdr_type*): ``'fel'``/``'mel'`` for a DV source with that layer,
-    ``'other'`` for any other DV profile and for a non-DV source converted up
-    to DV, ``''`` when the output isn't DV at all (including a DV source
-    converted away) — the pill only claims what's genuinely on screen.
+    Codec badges describe the source rather than the converted output, so a
+    Dolby Vision title retains its FEL/MEL/other pill when VS10 outputs HDR10
+    or SDR.  A non-DV source converted to Dolby Vision does not gain a pill.
     """
-    if hdr_token != "dolbyvision":
-        return ""
     if "dolby" not in hdr_type:
-        return "other"
+        return ""
     el_type = get_dv_el_type_raw().upper()
     if el_type == "FEL":
         return "fel"
@@ -213,37 +210,20 @@ _SCALE_SETTINGS = {
 # Base layout scale for the logo block; a user scale of 1.0 keeps the original size.
 _BASE_SCALE = 0.95
 
-def _amlogic_hdr_token(gamut: str) -> str:
-    """Classify the Amlogic output mode (``amlogic.eoft_gamut``) into an
-    ``HDR_LOGO_MAP`` key (``''`` for SDR / unknown)."""
-    parts = gamut.split()
-    mode = parts[0].upper() if parts else ""
-    if "DV" in mode or "DOLBY" in mode:
-        return "dolbyvision"
-    if "HDR10+" in mode or "HDR10PLUS" in mode or "PLUS" in mode:
-        return "hdr10+"
-    if "HLG" in mode:
-        return "hlg"
-    if "HDR" in mode:
-        return "hdr10"
-    return ""
-
-
-def _current_logos(hdr_token: str) -> list[str]:
+def _current_logos(hdr_type: str) -> list[str]:
     """Return [video, audio] logos to stack, or [] unless both are available.
-    The video logo falls back to SDR, so this effectively gates on the audio codec."""
+    The video logo describes the source format and falls back to SDR, so this
+    effectively gates on the audio codec."""
     codec = info("VideoPlayer.AudioCodec").lower().strip()
     audio_logo = AUDIO_LOGO_MAP.get(codec, "")
 
-    video_logo = HDR_LOGO_MAP.get(hdr_token, HDR_LOGO_MAP[""])
-    # An IMAX film gets the combined logo for the format it is shown in.
-    # *hdr_token* is the Amlogic output, so this follows what is genuinely on
-    # screen -- a source converted to another format takes that format's logo.
+    video_logo = HDR_LOGO_MAP.get(hdr_type, HDR_LOGO_MAP[""])
+    # An IMAX film gets the combined logo for its source format.
     # The film is identified for the whole runtime (see info.imax), not per
     # frame, and the map lookup comes first so only a candidate format pays for
     # the title match.
-    if hdr_token in IMAX_LOGO_MAP and is_known_imax_title():
-        video_logo = imax_logo(hdr_token) or video_logo
+    if hdr_type in IMAX_LOGO_MAP and is_known_imax_title():
+        video_logo = imax_logo(hdr_type) or video_logo
 
     if not audio_logo or not video_logo:
         return []
@@ -301,7 +281,7 @@ def _panel_controls(
 def _build_controls(
     logos: list[str], colors: dict[str, str],
     offset_x: int, offset_y: int, screen_w: int, screen_h: int,
-    user_scale: float = 1.0, layer_token: str = "",
+    user_scale: float = 1.0, layer_token: str = "", pill_edge: int = 1,
 ) -> tuple[list[xbmcgui.ControlImage], xbmcgui.ControlImage | None]:
     """Lay out the logos as a vertical stack, sized to the skin.
 
@@ -312,6 +292,7 @@ def _build_controls(
     the ARGB tints (``bg``/``video``/``audio``/``divider``/``convert_dot``/
     ``fel``/``mel``/``other``), and ``layer_token`` selects the Dolby Vision
     layer-indicator pill's colour, omitting the pill when ``''``.
+    ``pill_edge`` selects bottom (0) or top (1, default) within the padding.
 
     Returns ``(controls, dot)``, where ``dot`` is the conversion-indicator
     badge (also in ``controls``) so the caller can give it its own stricter
@@ -329,6 +310,14 @@ def _build_controls(
     pad_x    = int(screen_w * 0.012 * scale)
     pad_y    = int(screen_h * 0.02 * scale)
     radius   = int(screen_h * 0.02 * scale)
+
+    has_pill = layer_token in ("fel", "mel", "other")
+    pill_h = max(1, int(box_h * 0.15))
+    pill_margin = max(1, int(screen_h * 0.01 * scale))
+    if has_pill:
+        # Give the pill matching clearance to the logo and the outer edge.
+        # Reserve the same padding at both ends so either position is balanced.
+        pad_y = pill_h + 2 * pill_margin
 
     count   = len(logos)
     stack_h = count * box_h + (count - 1) * v_gap
@@ -375,14 +364,14 @@ def _build_controls(
     dot = _make_dot(dot_cx, dot_cy, dot_d, colors["convert_dot"])
     controls.append(dot)
 
-    # Dolby Vision layer-indicator pill, centred on the panel's bottom edge
+    # Dolby Vision layer-indicator pill, centred in the top or bottom padding
     # (FEL / MEL / any other DV profile); omitted for non-DV sources.
-    if layer_token in ("fel", "mel", "other"):
+    if has_pill:
         pill_w      = max(1, int(box_w * 0.30))
-        pill_h      = max(1, int(box_h * 0.15))
-        pill_margin = max(1, int(box_h * 0.10))
         pill_x = panel_x + (panel_w - pill_w) // 2
-        pill_y = panel_y + panel_h - pill_margin - pill_h
+        pill_y = panel_y + pill_margin
+        if pill_edge != 1:
+            pill_y += panel_h - 2 * pill_margin - pill_h
         controls.append(
             _make_image(_PILL_TEXTURE, pill_x, pill_y, pill_w, pill_h, colors[layer_token])
         )
@@ -445,6 +434,15 @@ def _mode_scale(addon, mode: str) -> float:
     except Exception:
         return 1.0
     return min(1.3, max(0.8, percent / 100.0))
+
+
+def _pill_edge(addon, mode: str) -> int:
+    """Use top placement unless Bottom was explicitly selected."""
+    try:
+        value = addon.getSetting(f"splash_{mode}_pill_edge")
+    except Exception:
+        return 1
+    return 0 if value == "0" else 1
 
 
 def _home_prop_condition(prop: str, expected: bool = True) -> str:
@@ -541,7 +539,7 @@ def _safe_addon():
     """Return a fresh Addon whose settings can be read, or None.
 
     Updating the addon during playback briefly deletes and re-registers
-    ``script.tinyppi``: an ``Addon()`` built then can raise ``RuntimeError``, or
+    ``script.signde.tinyppi``: an ``Addon()`` built then can raise ``RuntimeError``, or
     load with its settings definition not ready (``TypeError`` on any read).
     Construction alone doesn't prove it's usable — one read does — so the
     long-lived splash loop must tolerate both and exit quietly.
@@ -578,8 +576,7 @@ def open_splash() -> None:
     if home.getProperty(PROP_SPLASH_ACTIVE) == "true":
         return
 
-    gamut = info("Player.Process(amlogic.eoft_gamut)")
-    if not _current_logos(_amlogic_hdr_token(gamut)):
+    if not _current_logos(get_hdr_format()):
         return
 
     video_window = xbmcgui.Window(WINDOW_FULLSCREEN_VIDEO)
@@ -611,10 +608,9 @@ def open_splash() -> None:
             in_fullscreen = xbmc.getCondVisibility("Window.IsActive(fullscreenvideo)")
             in_start_window = show_on_start and (now - started < duration)
 
-            # The gamut and the detected format drive the badge, the pill and
-            # the logos alike, so read each once here rather than in all three.
+            # Source format drives the codec badge and its DV pill.  The gamut
+            # remains the actual output and is used only for conversion state.
             gamut = info("Player.Process(amlogic.eoft_gamut)")
-            hdr_token = _amlogic_hdr_token(gamut)
             hdr_type = get_hdr_format()
 
             # Live-updated every poll so the dot's own visibleCondition can pop
@@ -627,7 +623,7 @@ def open_splash() -> None:
             desired_states: dict[str, _ModeState] = {}
             colors_by_mode: dict[str, dict[str, str]] = {}
             if in_fullscreen:
-                logos = _current_logos(hdr_token)
+                logos = _current_logos(hdr_type)
                 if logos:
                     modes = []
                     if show_on_start and in_start_window:
@@ -641,7 +637,7 @@ def open_splash() -> None:
                         # Publish every themed colour once, then read each
                         # context's own tints back so they stay independent.
                         apply_theme(home, addon)
-                        layer_token = _dv_layer_token(hdr_token, hdr_type)
+                        layer_token = _dv_layer_token(hdr_type)
                         for mode in modes:
                             colors = _mode_colors(home, mode)
                             colors_by_mode[mode] = colors
@@ -654,6 +650,7 @@ def open_splash() -> None:
                                 colors=tuple(sorted(colors.items())),
                                 condition=_visible_condition(mode, show_on_osd),
                                 layer_token=layer_token,
+                                pill_edge=_pill_edge(addon, mode),
                             )
 
             remove_modes = [
@@ -678,6 +675,7 @@ def open_splash() -> None:
                     list(desired.logos), colors_by_mode[mode],
                     desired.offset_x, desired.offset_y,
                     screen_w, screen_h, desired.scale, desired.layer_token,
+                    desired.pill_edge,
                 )
                 controls_by_mode[mode] = controls
                 states[mode] = desired

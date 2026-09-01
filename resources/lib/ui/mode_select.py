@@ -1,6 +1,6 @@
 """VS10-mode selection dialog.
 
-Open via ``RunScript(script.tinyppi,dialog)`` or ``open_dialog()``.
+Open via ``RunScript(script.signde.tinyppi,dialog)`` or ``open_dialog()``.
 """
 
 import json
@@ -11,7 +11,7 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 from core import display
-from core.utils import PROP_HDR10PLUS_PRESENT, clear_overlay_state
+from core.utils import clear_overlay_state
 
 _ADDON      = xbmcaddon.Addon()
 _ADDON_PATH = _ADDON.getAddonInfo("path")
@@ -247,7 +247,7 @@ def original_hdr() -> None:
 def original_hlg() -> None:
     # HLG is not a valid VS10 input, so turn VS10 off to let HLG pass through
     # the standard HDR path untouched.  That is also why neither the dialog nor
-    # the dashboard offers HLG any modes at all; this one is left reachable
+    # the selector offers HLG any modes at all; this one is left reachable
     # through ``run_mode`` for a keymap that wants to clear a VS10 mode an
     # earlier title left behind.  Follow-source with enable=N is the state
     # Kodi itself leaves the driver in when it releases Dolby Vision; policy 0 is
@@ -260,8 +260,10 @@ def original_hlg() -> None:
     )
 
 
-# Alias of dv; kept as its own name so keymaps can use both.
-original_dv = dv
+# Outside playback there is no source stream for "Original" to follow, so the
+# sysfs fallback restores bypass. During playback this name is routed to Kodi's
+# source-aware ``vs10.original`` action below.
+original_dv = original_sdr
 
 
 def sdr8() -> None:
@@ -301,7 +303,7 @@ _VS10_ACTION = {
     "original_sdr": "vs10.original",
     "original_hdr": "vs10.original",
     "original_hlg": "vs10.original",
-    "original_dv":  "vs10.dv",
+    "original_dv":  "vs10.original",
     "dv":           "vs10.dv",
     "hdr10":        "vs10.hdr10",
     "sdr10":        "vs10.sdr",
@@ -422,20 +424,6 @@ def _player_led_mode() -> bool:
     return False
 
 
-def _hybrid_dv_hdr10plus() -> bool:
-    """Return whether the playing stream is a Dolby Vision + HDR10+ hybrid.
-
-    Read off the two properties ``info.properties.publish_hdr_type`` publishes,
-    rather than parsed here: the side data is already being read once a poll
-    for the overlay and the dialog, and this only needs its answer.
-    """
-    home = xbmcgui.Window(10000)
-    return (
-        home.getProperty(PROP_HDR10PLUS_PRESENT) == "1"
-        and "dolby" in home.getProperty("TinyPPI.HdrType").lower()
-    )
-
-
 def set_mode(name: str) -> None:
     """Apply the VS10 mode ``name`` (see ``_MODES``).
 
@@ -443,26 +431,10 @@ def set_mode(name: str) -> None:
     neither path performs on its own -- the display reset a switch to or from
     Dolby Vision needs.  The driver's output mode is sampled before the switch
     so the two sides can be compared afterwards.
-
-    A hybrid Dolby Vision + HDR10+ title is switched like any other and only
-    noted in the log.  Neither the dialog nor the dashboard offers it a mode
-    any more -- the driver does not take one there -- but this is
-    also the entry point a keymap and ``run_mode`` come through, and a mode
-    bound to a button stays bound to it: refusing the write here would replace
-    a switch that does nothing with a shortcut that does nothing, and take the
-    escape hatch away from a box where it turns out to work.
     """
     if name not in _MODES:
         xbmc.log(f"TinyPPI: Unknown mode '{name}'", xbmc.LOGERROR)
         return
-
-    if _hybrid_dv_hdr10plus():
-        xbmc.log(
-            f"TinyPPI: '{name}' is being applied to a Dolby Vision title that "
-            "also carries HDR10+; the driver is not expected to take a VS10 "
-            "mode for a hybrid grade, so the output may not change",
-            xbmc.LOGWARNING,
-        )
 
     dv_before = _dv_output_active()
     _apply_mode(name)
@@ -532,17 +504,10 @@ __all__ = list(_MODES.keys()) + ["open_dialog", "set_mode"]
 # Dialog button id -> mode name (routed through ``set_mode`` so the dialog also
 # prefers the native VS10 Actions when they are available).
 _ACTIONS = {
-    # SDR
-    1002: "original_sdr",
-    1003: "hdr10",
-    1004: "dv",
-    # HDR10
-    1005: "original_hdr",
-    1006: "sdr8",
-    1008: "dv",
-    # DV
-    1012: "original_dv",
-    1013: "sdr8",
+    1102: "original",
+    1103: "sdr10",
+    1104: "hdr10",
+    1105: "dv",
 }
 
 
@@ -550,11 +515,12 @@ class SettingsDialog(xbmcgui.WindowXMLDialog):
     """Menu dialog to pick a VS10 output mode or launch the TinyPPI overlay."""
 
     def onInit(self) -> None:
-        # The SDR / HDR10 / DV groups branch on TinyPPI.HdrType, derived from
-        # the stream's side data; refresh it so the right group appears as soon
+        # The SDR / HDR10 / DV groups branch on SigndeTinyPPI.HdrType, derived from
+        # the CE21 player API; refresh it so the right group appears as soon
         # as the player publishes it.
         self._running = True
         self._pending_mode = None
+        self._pending_tinyppi = False
         self._monitor = xbmc.Monitor()
         threading.Thread(target=self._hdr_type_loop, daemon=True).start()
 
@@ -585,14 +551,28 @@ class SettingsDialog(xbmcgui.WindowXMLDialog):
 
     def onClick(self, control_id: int) -> None:
         if control_id == _BTN_TINYPPI:
+            # Do not open a second modal WindowXMLDialog from this dialog's
+            # click callback. Kodi is still closing this window at that point
+            # and can discard the new PPI window. Hand it off after doModal()
+            # returns, just as the VS10 actions below are deferred.
+            self._pending_tinyppi = True
             self.close()
-            clear_overlay_state(xbmcgui.Window(10000))
-            from ui.overlay import open_tinyppi
-            open_tinyppi()
             return
 
         mode = _ACTIONS.get(control_id)
         if mode:
+            if mode == "original":
+                hdr_type = xbmcgui.Window(10000).getProperty(
+                    "SigndeTinyPPI.HdrType"
+                ).lower()
+                if "dolby" in hdr_type:
+                    mode = "original_dv"
+                elif "hlg" in hdr_type:
+                    mode = "original_hlg"
+                elif "hdr" in hdr_type:
+                    mode = "original_hdr"
+                else:
+                    mode = "original_sdr"
             # Defer applying: a native VS10 action fired now would be dropped by
             # the window manager while this modal dialog's closing animation is
             # still running ("ignoring action ..., because topmost modal dialog
@@ -620,7 +600,14 @@ def open_dialog() -> None:
     )
     win.doModal()
     mode = getattr(win, "_pending_mode", None)
+    open_tinyppi_pending = getattr(win, "_pending_tinyppi", False)
     del win
+    if open_tinyppi_pending:
+        clear_overlay_state(xbmcgui.Window(10000))
+        _delay(250)
+        from ui.overlay import open_tinyppi
+        open_tinyppi()
+        return
     if mode:
         # The dialog and its closing animation are fully gone now, so a native
         # VS10 action will reach the fullscreen video player instead of being

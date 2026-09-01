@@ -1,4 +1,4 @@
-"""Compute and publish Window properties for TinyPPI.
+"""Compute and publish Window properties for SigndeTinyPPI.
 
 Call ``publish_scene_properties(window)`` on every polling tick and
 ``update_static_properties(window)`` on the slower one, and
@@ -24,7 +24,6 @@ from core.maps import (
     VIDEO_CODEC_MAP,
 )
 from core.utils import (
-    PROP_HDR10PLUS_PRESENT,
     clean,
     cond,
     first_float,
@@ -47,7 +46,6 @@ from info.dvinfo import (
     get_dv_version,
     get_hdr10_max_cll_fall,
     get_hdr10_mdl,
-    get_hdr10plus_present,
     get_hdr_format,
     get_l1_nits,
     get_l1_pq,
@@ -75,7 +73,7 @@ def _channel_dir() -> str:
 
 def _channels_shown() -> bool:
     """Return whether the channel graphics are switched on."""
-    return xbmcgui.Window(10000).getProperty("TinyPPI.ShowChannelIcon") == "1"
+    return xbmcgui.Window(10000).getProperty("SigndeTinyPPI.ShowChannelIcon") == "1"
 
 
 # --- Video properties ------------------------------------------------------
@@ -200,6 +198,15 @@ def get_AspectRatioVar(l5_offsets: str, is_dv: bool | None = None) -> str:
     return _snapped_ar(ratio) if ratio is not None else raw
 
 
+def get_VideoLetterboxOffsetVar() -> str:
+    """Return active top/bottom letterbox offsets, or N/A when unavailable."""
+    top = clean(info("Player.Process(video.active.area.top.lines)"))
+    bottom = clean(info("Player.Process(video.active.area.bottom.lines)"))
+    if top and bottom:
+        return f"{top} T | {bottom} B"
+    return xbmcaddon.Addon().getLocalizedString(32033) or "N/A"
+
+
 def get_ImaxVar() -> str:
     """Return ``IMAX Enhanced`` / ``IMAX`` for a film recognised as IMAX
     material, or ``''`` otherwise.
@@ -228,11 +235,12 @@ def get_VideoBitrateMBVar() -> str:
 
 def get_VideoLiveBitrateVar() -> str:
     """Return video live bitrate with dot instead of comma."""
-    bitrate = info("Player.Process(videolivebitrate)")
+    bitrate = info("Player.Process(video.live.mibit.rate)")
     if not bitrate:
         return ""
 
-    return str(bitrate).replace(",", ".")
+    value = str(bitrate).replace(",", ".")
+    return value if "/s" in value else f"{value} Mb/s"
 
 
 def get_VideoCodecVar() -> str:
@@ -345,6 +353,34 @@ def _with_unit(value: str, unit: str) -> str:
 
 # --- Amlogic EOFT / gamut --------------------------------------------------
 
+def get_VS10StatusVar() -> str:
+    """Describe the active VS10 mode, including a source-to-output conversion."""
+    mode = info("Player.Process(amlogic.vs10.mode)").strip()
+    if not mode:
+        return "N/A"
+    if mode.lower() == "bypass":
+        return "Bypass"
+
+    source = info("Player.Process(video.source.hdr.type)").strip()
+    if not source:
+        return mode
+    if source.casefold() != mode.casefold():
+        return f"{source} → {mode}"
+
+    # Keep useful source profile detail when DV remains DV. Do not infer the
+    # converted output's profile from the source or from the selected mode.
+    if source.casefold() == "dolby vision":
+        profile = info("Player.Process(video.dovi.profile)").strip()
+        if profile and profile != "0":
+            source += f" Profile {profile}"
+        layer = info("Player.Process(video.dovi.el.type)").strip().lower()
+        if layer == "full":
+            source += " FEL"
+        elif layer == "minimum":
+            source += " MEL"
+    return source
+
+
 def get_ModeVar() -> str:
     """Return the first token of ``amlogic.eoft_gamut`` (the mode field)."""
     parts = info("Player.Process(amlogic.eoft_gamut)").split()
@@ -362,7 +398,7 @@ def _output_mode_from_videoplayer() -> str:
     label (``SDR`` / ``HDR10`` / ``HLG`` / ``HDR10+`` / ``Dolby Vision``).
 
     Reads Kodi's own source-side HDR detection, so a stream that carries no
-    side-data payload still names its format.  An empty ``VideoPlayer.HDRType``
+    CE21 process fields still name its format. An empty ``VideoPlayer.HDRType``
     means no HDR signalling, i.e. ``SDR``.
     """
     hdr = info("VideoPlayer.HDRType").lower()
@@ -393,11 +429,12 @@ def get_AudioBitrateKBVar() -> str:
 
 def get_AudioLiveBitrateVar() -> str:
     """Return audio live bitrate with dot instead of comma."""
-    bitrate = info("Player.Process(audiolivebitrate)")
+    bitrate = info("Player.Process(audio.live.kibit.rate)")
     if not bitrate:
         return ""
 
-    return str(bitrate).replace(",", ".")
+    value = str(bitrate).replace(",", ".")
+    return value if "/s" in value else f"{value} Kb/s"
 
 
 def get_AudioCodecVar() -> str:
@@ -416,6 +453,27 @@ def get_AudioCodecSpatialVar() -> str:
     if codec in ("eac3_ddp_atmos", "truehd_atmos"):
         return "(Atmos)"
     return ""
+
+
+def get_AudioObjectDescriptionVar() -> str:
+    """Return the build-provided object-audio description with codec fallback."""
+    description = info("Player.Process(audio.object.description)").strip()
+    if description:
+        return description
+    codec = info("VideoPlayer.AudioCodec")
+    if codec in ("eac3_ddp_atmos", "truehd_atmos"):
+        return "Atmos"
+    if codec == "dtshd_ma_x_imax":
+        return "IMAX"
+    if codec == "dtshd_ma_x":
+        return "DTS:X"
+    return xbmcaddon.Addon().getLocalizedString(32033) or "N/A"
+
+
+def get_AudioDialogNormalizationVar() -> str:
+    """Return dialog-normalization metadata, or N/A when not applicable."""
+    value = info("Player.Process(audio.dialnorm)").strip()
+    return value or xbmcaddon.Addon().getLocalizedString(32033) or "N/A"
 
 
 def get_AudioChannelsVar() -> str:
@@ -618,8 +676,8 @@ def _metadata_units() -> tuple[str, str]:
     label, and the PQ unit goes with it, so the metadata rows either all wear a
     unit or none of them do.
     """
-    unit_color = info("Window(10000).Property(TinyPPI.UnitColor)")
-    unit_label = info("Window(10000).Property(TinyPPI.UnitLabel)")
+    unit_color = info("Window(10000).Property(SigndeTinyPPI.UnitColor)")
+    unit_label = info("Window(10000).Property(SigndeTinyPPI.UnitLabel)")
 
     if not unit_label:
         return "", ""
@@ -646,7 +704,7 @@ def _channel_setting_for(hdr_type: str) -> str:
 
 
 def publish_channel_visibility(home=None, published=None) -> None:
-    """Publish ``TinyPPI.ShowChannelIcon`` for the current output type.
+    """Publish ``SigndeTinyPPI.ShowChannelIcon`` for the current output type.
 
     Re-read every poll rather than once at open: the HDR type is detected
     asynchronously, so a stream that turns out to be DV must switch to the DV
@@ -658,7 +716,7 @@ def publish_channel_visibility(home=None, published=None) -> None:
     writes unconditionally.
     """
     home = home or xbmcgui.Window(10000)
-    setting = _channel_setting_for(home.getProperty("TinyPPI.EffectiveHdrType"))
+    setting = _channel_setting_for(home.getProperty("SigndeTinyPPI.EffectiveHdrType"))
     enabled = xbmcaddon.Addon().getSetting(setting) == "true"
     if published is None:
         published = {}
@@ -666,7 +724,7 @@ def publish_channel_visibility(home=None, published=None) -> None:
         home,
         published,
         (
-            ("TinyPPI.ShowChannelIcon", "1" if enabled else "0"),
+            ("SigndeTinyPPI.ShowChannelIcon", "1" if enabled else "0"),
         ),
     )
 
@@ -713,15 +771,15 @@ def _hdr10_panel_stands_in_for_dv() -> bool:
     """
     home = xbmcgui.Window(10000)
     return (
-        "dolby" in home.getProperty("TinyPPI.HdrType").lower()
-        and home.getProperty("TinyPPI.EffectiveHdrType") == "hdr10"
+        "dolby" in home.getProperty("SigndeTinyPPI.HdrType").lower()
+        and home.getProperty("SigndeTinyPPI.EffectiveHdrType") == "hdr10"
     )
 
 
 def publish_hdr_type(home=None, published=None) -> None:
-    """Publish the detected source HDR type as ``TinyPPI.HdrType`` on the Home
+    """Publish the detected source HDR type as ``SigndeTinyPPI.HdrType`` on the Home
     window, plus the type the overlay layout follows as
-    ``TinyPPI.EffectiveHdrType``.
+    ``SigndeTinyPPI.EffectiveHdrType``.
 
     HDR10+ is published as ``hdr10plus`` because Kodi's boolean parser treats
     ``+`` as AND; it still contains ``hdr10`` so ``String.Contains`` branches match.
@@ -729,13 +787,6 @@ def publish_hdr_type(home=None, published=None) -> None:
     The two differ once VS10 converts (see ``_effective_hdr_type``): the source
     stays HDR / DV -- the mode-select dialog and the ``Converting`` row need it
     to name what is being converted -- while the overlay follows the output.
-
-    ``TinyPPI.Hdr10PlusPresent`` rides along because it answers the same
-    question one step further: a Dolby Vision source reads as ``dolbyvision``
-    above whether or not an ST 2094-40 payload sits beside its RPU, and that
-    hybrid grade is the one Dolby Vision stream the VS10 modes do not take.
-    The dialog and the dashboard both branch on it to leave such
-    a title with no modes, exactly as they do for a plain HDR10+ one.
 
     ``published`` tracks the polling loop's window; pass it from there to
     skip a write when neither value has changed.  Left unset, every call
@@ -751,9 +802,8 @@ def publish_hdr_type(home=None, published=None) -> None:
         home,
         published,
         (
-            ("TinyPPI.HdrType", hdr_type),
-            ("TinyPPI.EffectiveHdrType", _effective_hdr_type(hdr_type)),
-            (PROP_HDR10PLUS_PRESENT, get_hdr10plus_present()),
+            ("SigndeTinyPPI.HdrType", hdr_type),
+            ("SigndeTinyPPI.EffectiveHdrType", _effective_hdr_type(hdr_type)),
         ),
     )
 
@@ -844,6 +894,7 @@ def publish_scene_properties(window, published=None) -> None:
         window,
         published,
         (
+            ("VS10StatusVar", get_VS10StatusVar()),
             ("AspectRatioVar", get_AspectRatioVar(l5_offsets)),
             ("DoviLevel5OffsetsVar", _separated(l5_offsets)),
             ("DoviLevel5OffsetsIconVisible", l5_icon_visible),
@@ -896,8 +947,8 @@ def publish_static_properties(window, published=None) -> None:
         clean(info("Player.Process(videofps)"))
     )
 
-    # Output-mode line from the stream's side data; fall back to a plain label
-    # from Kodi's ``VideoPlayer.HDRType`` when it would show N/A.
+    # Output-mode line from the CE21 process API; fall back to Kodi's plain
+    # ``VideoPlayer.HDRType`` label when it would show N/A.
     output_mode = get_output_mode()
     if is_status_label(output_mode):
         output_mode = _output_mode_from_videoplayer() or output_mode
@@ -911,6 +962,7 @@ def publish_static_properties(window, published=None) -> None:
             ("VideoPixelFormatVar", get_VideoPixelFormatVar()),
             ("DisplayModeVar", get_DisplayModeVar()),
             ("VideoResolutionVar", get_VideoResolutionVar()),
+            ("VideoLetterboxOffsetVar", get_VideoLetterboxOffsetVar()),
             ("ImaxVar", get_ImaxVar()),
             ("VideoBitrateMBVar", get_VideoBitrateMBVar()),
             ("VideoLiveBitrateVar", get_VideoLiveBitrateVar()),
@@ -932,6 +984,8 @@ def publish_static_properties(window, published=None) -> None:
             ("AudioLiveBitrateVar", get_AudioLiveBitrateVar()),
             ("AudioCodecVar", get_AudioCodecVar()),
             ("AudioCodecSpatialVar", get_AudioCodecSpatialVar()),
+            ("AudioObjectDescriptionVar", get_AudioObjectDescriptionVar()),
+            ("AudioDialogNormalizationVar", get_AudioDialogNormalizationVar()),
             ("AudioChannelsVar", get_AudioChannelsVar()),
             ("AudioChannelsInputVar", get_AudioChannelsInputVar()),
             ("ChannelIconVar", get_ChannelIconVar()),

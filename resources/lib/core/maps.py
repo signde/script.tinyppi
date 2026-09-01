@@ -168,7 +168,9 @@ AUDIO_LOGO_MAP = {
     "mp2":             "codecs/MP2.png",
     "mp3":             "codecs/MP3.png",
     "mp3float":        "codecs/MP3.png",
+    "ogg":             "codecs/Vorbis.png",
     "opus":            "codecs/OPUS.png",
+    "vorbis":          "codecs/Vorbis.png",
 }
 
 # HDR type -> splash logo (codecs/*.png).  The empty string maps to the SDR

@@ -11,28 +11,20 @@ import xbmcgui
 
 _DECIMAL_RE = re.compile(r"-?\d+(?:[.,]\d+)?")
 
-# Separators between individual readings in a composite value.  The metadata
-# view uses a pipe; the compact overlay swaps it for a lowercase ``l`` because
-# that glyph reads more clearly in its narrow font.  Runs of spaces separate
-# the wide trim-table values.
+# Separators between individual readings in a composite value. The compact
+# overlay swaps a pipe for a lowercase ``l`` because that glyph reads more
+# clearly in its narrow font. Runs of spaces separate wide tabular values.
 _READING_GAP_RE = re.compile(r"(\s{2,}|\s+[|l]\s+)")
 
 # Home-window (10000) properties describing the TinyPPI overlay state.
 # Shared by overlay.py and mode_select.py.
-PROP_RUNNING     = "TinyPPI.Running"
-PROP_ACTIVE      = "TinyPPI.Active"
-PROP_DIALOG_MODE = "TinyPPI.DialogMode"
+PROP_RUNNING     = "SigndeTinyPPI.Running"
+PROP_ACTIVE      = "SigndeTinyPPI.Active"
+PROP_DIALOG_MODE = "SigndeTinyPPI.DialogMode"
 
 # The output type the overlay's layout follows, published by
 # info.properties.publish_hdr_type.
-PROP_EFFECTIVE_HDR_TYPE = "TinyPPI.EffectiveHdrType"
-
-# Whether the playing stream still carries HDR10+ dynamic metadata, published
-# alongside the two above.  What reads it is the VS10 side: a Dolby Vision
-# title with an ST 2094-40 payload beside its RPU is a hybrid grade, and the
-# driver does not take the VS10 modes for one (issue #71), so neither the
-# dialog nor the dashboard offers them.
-PROP_HDR10PLUS_PRESENT = "TinyPPI.Hdr10PlusPresent"
+PROP_EFFECTIVE_HDR_TYPE = "SigndeTinyPPI.EffectiveHdrType"
 
 
 def cond(condition: str) -> bool:
@@ -61,7 +53,10 @@ def is_effective_dv() -> bool:
 
 def info(label: str) -> str:
     """Return the current value of a Kodi InfoLabel (never None)."""
-    return xbmc.getInfoLabel(label)
+    # Some Kodi builds return an unknown expression verbatim.  Treat that as
+    # an empty result rather than publishing it as valid process data.
+    value = xbmc.getInfoLabel(label) or ""
+    return "" if value.strip().lower() == label.strip().lower() else value
 
 
 def clean(val) -> str:
@@ -93,8 +88,7 @@ def _changed_parts(previous, current) -> list:
     Strings are split on the separators between readings, so one moving number
     in a composite value does not report its neighbours as changed; the
     returned indices are into that split, which ``_colored_parts`` rebuilds the
-    string from.  Lists are compared cell by cell, for the metadata view's
-    fixed-column tables.
+    string from. Lists are compared cell by cell for callers with table data.
 
     ``[_WHOLE]`` when the two cannot be lined up part by part at all -- a
     different number of readings, or a value that changed shape from a table
@@ -330,15 +324,10 @@ _JOIN_TIMEOUT = 1.0
 def join_refresh_thread(thread) -> None:
     """Wait for a view's refresh thread to actually stop.
 
-    Every view runs its loop the same way, so they all wind it down the same
-    way: the loop only checks the view's running flag between ticks, so it can
-    outlive doModal() by up to one tick -- still writing to a window Kodi is
-    tearing down, and still touching the side-data hold state the next view's
-    loop reads (info.dvmetadata's module-level _held / _held_source).  The
-    hand-over to the next view waits here instead of racing it.  Logs once if
-    the thread is still alive after the timeout -- a wedged thread can only
-    happen once per dialog instance, so an unconditional log on that path is
-    enough.
+    The loop only checks the view's running flag between ticks, so it can
+    outlive doModal() by up to one tick and still write to a window Kodi is
+    tearing down. Wait here instead of racing teardown. Logs once if the
+    thread is still alive after the timeout.
     """
     if thread is None:
         return

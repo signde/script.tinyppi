@@ -71,17 +71,11 @@ _NUDGE_ACTIONS = {
     xbmcgui.ACTION_MOVE_DOWN:  (0, _NUDGE_STEP),
 }
 
-# The view open_tinyppi() shows next once the current one closes.  On a Dolby
-# Vision source OK goes down into it and Back comes back up out of it; Back
-# here, on the overlay itself, is the end of the session.
-_VIEW_DV_METADATA = "dv_metadata"
-
 # Label properties carrying the readings in the overlay's two Dolby Vision
 # panels.  The RPU / BL / EL fields are icons whose green/red state already
 # makes a change visible, and the FEL/MEL tag has its own themed color; the
 # remaining text would otherwise all use the normal output color.  HDR10 rows
-# are included because they sit inside the DV metadata panel and are part of
-# the side data shown for a DV source.
+# are included because they sit inside the Dolby Vision metadata panel.
 _DV_VALUE_PROPERTIES = (
     "DoviCmVersionVar",
     "DoviStructureVar",
@@ -96,7 +90,7 @@ _DV_VALUE_PROPERTIES = (
     "Hdr10MaxCllFallVar",
 )
 
-_DV_CHANGED_COLOR    = "TinyPPI.OutputChangedColor"
+_DV_CHANGED_COLOR    = "SigndeTinyPPI.OutputChangedColor"
 _DV_CHANGED_FALLBACK = "FF82B1FF"  # Light blue, the setting's default
 
 # How long a changed reading stays in that color, in milliseconds (Output ->
@@ -190,22 +184,11 @@ def _preflight(home, player, toggle_log: str) -> bool:
     return not _dialog_lock
 
 
-def _dv_metadata_enabled() -> bool:
-    """Return whether OK may open the Dolby Vision metadata view.
-
-    Off out of the box: OK does nothing on the overlay until someone turns the
-    view on under Metadata, so the key keeps behaving as it always has for anyone
-    who has no use for the metadata.  A fresh ``Addon()`` avoids the cached
-    settings, so the toggle applies to a session already under way.
-    """
-    return xbmcaddon.Addon().getSettingBool("dv_metadata_view")
-
-
 def _nudge_enabled() -> bool:
     """Return whether the arrow keys may move the overlay around.
 
-    Off out of the box, like the metadata view: the arrow keys do nothing on
-    the overlay until someone turns the nudge on under General -> Position, so
+    Off out of the box: the arrow keys do nothing on the overlay until someone
+    turns the nudge on under General -> Position, so
     a stray press on the remote cannot walk the overlay off where it was put.
     Read once when the overlay opens rather than per key press, which is where
     a held-down arrow key would land it.
@@ -258,12 +241,9 @@ class TinyPPIDialog(xbmcgui.WindowXMLDialog):
         self._highlighter       = None
         self._shown: dict       = {}
         # Not underscore-prefixed: _show_overlay() seeds this from outside the
-        # class, the same way next_view below is read from outside once doModal()
-        # returns.
+        # class before the dialog is displayed.
         self.published: dict    = {}
         self._color_missing     = False
-        # Read by open_tinyppi() once doModal() returns; see _open_dv_metadata.
-        self.next_view  = None
 
     def onInit(self) -> None:
         self._running   = True
@@ -338,7 +318,7 @@ class TinyPPIDialog(xbmcgui.WindowXMLDialog):
         current = {
             name: self.published.get(name, "") for name in _DV_VALUE_PROPERTIES
         }
-        hdr_type = self.published.get("TinyPPI.HdrType", "").lower()
+        hdr_type = self.published.get("SigndeTinyPPI.HdrType", "").lower()
         color = self._dv_changed_color() if "dolby" in hdr_type else ""
         now   = time.monotonic()
         for name, value in current.items():
@@ -375,21 +355,10 @@ class TinyPPIDialog(xbmcgui.WindowXMLDialog):
     def _is_dv() -> bool:
         return is_effective_dv()
 
-    @staticmethod
-    def _is_dv_source() -> bool:
-        """Whether the stream itself is Dolby Vision, which is what decides
-        there is anything for the metadata view to show.
-
-        The source type, not the effective one the layout follows: VS10 may be
-        converting the picture to SDR or HDR10, but the side data still
-        describes the Dolby Vision stream being decoded.
-        """
-        return "dolby" in xbmcgui.Window(10000).getProperty("TinyPPI.HdrType").lower()
-
     def _has_channels(self) -> bool:
         """Mirror the skin's visibility condition for the channel variant."""
         return (
-            xbmcgui.Window(10000).getProperty("TinyPPI.ShowChannelIcon") == "1"
+            xbmcgui.Window(10000).getProperty("SigndeTinyPPI.ShowChannelIcon") == "1"
             and bool(self.getProperty("ChannelIconVar"))
         )
 
@@ -466,32 +435,11 @@ class TinyPPIDialog(xbmcgui.WindowXMLDialog):
         if action_id in (xbmcgui.ACTION_PREVIOUS_MENU, xbmcgui.ACTION_NAV_BACK):
             self.close_dialog()
             return
-        if action_id == xbmcgui.ACTION_SELECT_ITEM:
-            self._open_dv_metadata()
-            return
         if not self._nudge_on:
             return
         step = _NUDGE_ACTIONS.get(action_id)
         if step:
             self._move(*step)
-
-    def _open_dv_metadata(self) -> None:
-        """Hand over to the Dolby Vision metadata view.
-
-        Only when the metadata setting is on, and only for a Dolby Vision source
-        -- on anything else there is no side data to show, and OK keeps doing
-        what it did before either way, which is nothing.
-
-        The view is not opened from here: open_tinyppi() opens it once this
-        window is gone.  A modal opened from inside a callback would nest
-        inside the loop that dispatched the callback, and the same deferral is
-        what the VS10 dialog does with a picked mode, for the same reason --
-        an action fired while a modal is still closing is dropped.
-        """
-        if not _dv_metadata_enabled() or not self._is_dv_source():
-            return
-        self.next_view = _VIEW_DV_METADATA
-        self.close_dialog()
 
     def _start_update_loop(self) -> None:
         self._thread = threading.Thread(target=self._update_loop, daemon=True)
@@ -513,9 +461,8 @@ class TinyPPIDialog(xbmcgui.WindowXMLDialog):
         ``self.published`` makes both cadences cheap: whichever pass ran,
         an idle tick costs no ``setProperty`` calls, only the recompute.
 
-        A failed refresh never ends the loop: the values come from the player
-        and from the stream's side data, so a bad cycle is worth one stale
-        tick, not a window that stops auto-closing.  ``close_dialog`` runs
+        A failed refresh never ends the loop: a bad player-data cycle is worth
+        one stale tick, not a window that stops auto-closing. ``close_dialog`` runs
         from ``finally`` so even an unforeseen failure still releases the
         overlay instead of leaving it up, frozen and marked active.
         """
@@ -573,15 +520,11 @@ class TinyPPIDialog(xbmcgui.WindowXMLDialog):
 # Entry points
 # ---------------------------------------------------------------------------
 
-def _show_overlay(home) -> str | None:
-    """Show the overlay window once, and return the view it handed over to.
-
-    None when the overlay was simply closed, which ends the session.
-    """
+def _show_overlay(home) -> None:
+    """Show the overlay window once."""
     # Marks the overlay itself as on screen, which the codec-logo splash
     # follows.  Set per showing, not once per session: the overlay clears it as
-    # it closes, including when it closes to hand over to the metadata view, and
-    # the splash belongs with the overlay rather than with that view.
+    # it closes, and the splash belongs with the overlay itself.
     home.setProperty(PROP_ACTIVE, "true")
 
     dialog = TinyPPIDialog(
@@ -598,17 +541,11 @@ def _show_overlay(home) -> str | None:
     properties.publish_properties(dialog, dialog.published)
     dialog.doModal()
     dialog.join_update_loop()
-    next_view = dialog.next_view
     del dialog
-    return next_view
 
 
 def open_tinyppi() -> None:
     """Validate the environment and show TinyPPI until the viewer closes it.
-
-    The overlay is the view it opens with; on a Dolby Vision source OK hands
-    over to the metadata view and Back hands back, so this runs until one of
-    them is closed for good rather than handing over to the other.
 
     Skips silently on non-CoreELEC (unless ``_ALLOW_NON_COREELEC``), Kodi < 21,
     a 720p skin, no fullscreen video, or nothing playing; toggle-closes when the
@@ -620,19 +557,23 @@ def open_tinyppi() -> None:
     if not _preflight(home, player, "TinyPPI: Toggle close"):
         return
 
-    elements_visible = _elements_visible()
+    modern_mode = _ADDON.getSettingInt("ppi_mode") == 1
+    elements_visible = _elements_visible() if modern_mode else "0"
     _set_overlay_state(home)
     set_window_properties(
         home,
         (
-            ("TinyPPI.Filename", _ADDON.getSetting("filename")),
             (
-                "TinyPPI.ShowL5Icon",
+                "SigndeTinyPPI.Filename",
+                _ADDON.getSetting("filename") if modern_mode else "false",
+            ),
+            (
+                "SigndeTinyPPI.ShowL5Icon",
                 "0" if _ADDON.getSetting("show_l5_icon") == "false" else "1",
             ),
-            ("TinyPPI.ShowLine", elements_visible),
-            ("TinyPPI.ShowHeaderTitle", elements_visible),
-            ("TinyPPI.ShowHeaderIcon", elements_visible),
+            ("SigndeTinyPPI.ShowLine", elements_visible),
+            ("SigndeTinyPPI.ShowHeaderTitle", elements_visible),
+            ("SigndeTinyPPI.ShowHeaderIcon", elements_visible),
         ),
     )
     # From the HDR type known so far, so the right variant is up before the first
@@ -641,12 +582,7 @@ def open_tinyppi() -> None:
     apply_theme(home, _ADDON)
 
     try:
-        while _show_overlay(home) == _VIEW_DV_METADATA:
-            # Loaded on the first hand-over, so a session that never opens the
-            # metadata view never pays for it.
-            from ui.dvmetadata import open_dv_metadata
-            if not open_dv_metadata():
-                break
+        _show_overlay(home)
     finally:
         _release_overlay(home)
 
@@ -664,9 +600,9 @@ def open_dialog_mode() -> None:
     set_window_properties(
         home,
         (
-            ("TinyPPI.ShowLine", elements_visible),
-            ("TinyPPI.ShowHeaderTitle", elements_visible),
-            ("TinyPPI.ShowHeaderIcon", elements_visible),
+            ("SigndeTinyPPI.ShowLine", elements_visible),
+            ("SigndeTinyPPI.ShowHeaderTitle", elements_visible),
+            ("SigndeTinyPPI.ShowHeaderIcon", elements_visible),
         ),
     )
     apply_theme(home, _ADDON)
