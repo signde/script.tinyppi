@@ -21,7 +21,7 @@ import xbmc
 import xbmcvfs
 
 # Cache of display-sized textures, keyed by source name, size and mtime.
-_CACHE_DIR = "special://profile/addon_data/script.tinyppi/scaled_images"
+_CACHE_DIR = "special://profile/addon_data/script.signde.tinyppi/scaled_images"
 _PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 
 # Builds currently running via ensure_texture(), so a caller polling once a

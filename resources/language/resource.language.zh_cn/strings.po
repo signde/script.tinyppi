@@ -20,8 +20,8 @@ msgid "General"
 msgstr "常规"
 
 msgctxt "#32003"
-msgid "TinyPPI settings"
-msgstr "TinyPPI 设置"
+msgid "signde PPI settings"
+msgstr "signde PPI 设置"
 
 msgctxt "#32005"
 msgid "Decoder"
@@ -64,8 +64,8 @@ msgid "Show file name"
 msgstr "显示文件名"
 
 msgctxt "#32021"
-msgid "Show the currently playing file name in TinyPPI."
-msgstr "在 TinyPPI 中显示当前播放文件的名称。"
+msgid "Show the currently playing file name in signde PPI."
+msgstr "在 signde PPI 中显示当前播放文件的名称。"
 
 msgctxt "#32022"
 msgid "Video queue / data"
@@ -176,8 +176,8 @@ msgid "Choose what opens when the add-on is launched."
 msgstr "选择插件启动时打开的内容。"
 
 msgctxt "#32094"
-msgid "TinyPPI"
-msgstr "TinyPPI"
+msgid "signde PPI"
+msgstr "signde PPI"
 
 msgctxt "#32095"
 msgid "VS10 dialog"
@@ -188,8 +188,8 @@ msgid "Bit depth"
 msgstr "位深度"
 
 msgctxt "#32101"
-msgid "Customise the TinyPPI overlay colors."
-msgstr "自定义 TinyPPI 叠加层的颜色。"
+msgid "Customise the signde PPI overlay colors."
+msgstr "自定义 signde PPI 叠加层的颜色。"
 
 msgctxt "#32103"
 msgid "Background"
@@ -964,12 +964,12 @@ msgid "Color and transparency of the audio format logo."
 msgstr "音频格式徽标的颜色和透明度。"
 
 msgctxt "#32319"
-msgid "Show codec logos in the TinyPPI overlay"
-msgstr "在 TinyPPI 叠加层中显示编解码器徽标"
+msgid "Show codec logos in the signde PPI overlay"
+msgstr "在 signde PPI 叠加层中显示编解码器徽标"
 
 msgctxt "#32320"
-msgid "Also shows the format logos while the TinyPPI info overlay is open."
-msgstr "在 TinyPPI 信息叠加层打开时也显示格式徽标。"
+msgid "Also shows the format logos while the signde PPI info overlay is open."
+msgstr "在 signde PPI 信息叠加层打开时也显示格式徽标。"
 
 msgctxt "#32321"
 msgid "Divider"
@@ -996,8 +996,8 @@ msgid "Video OSD"
 msgstr "视频 OSD"
 
 msgctxt "#32327"
-msgid "TinyPPI overlay"
-msgstr "TinyPPI 叠加层"
+msgid "signde PPI overlay"
+msgstr "signde PPI 叠加层"
 
 msgctxt "#32328"
 msgid "Size (%)"
@@ -1040,8 +1040,8 @@ msgid "Auto-hide"
 msgstr "自动隐藏"
 
 msgctxt "#32345"
-msgid "Automatically hides the TinyPPI overlay after the selected time (in seconds). 0 = off. Does not apply to the VS10 dialog."
-msgstr "在设定的时间（秒）后自动隐藏 TinyPPI 叠加层。0 = 关闭。不适用于 VS10 对话框。"
+msgid "Automatically hides the signde PPI overlay after the selected time (in seconds). 0 = off. Does not apply to the VS10 dialog."
+msgstr "在设定的时间（秒）后自动隐藏 signde PPI 叠加层。0 = 关闭。不适用于 VS10 对话框。"
 
 msgctxt "#32348"
 msgid "Horizontal offset of the channel box"
@@ -1187,30 +1187,6 @@ msgctxt "#32388"
 msgid "Display"
 msgstr "显示"
 
-msgctxt "#32389"
-msgid "Dolby Vision metadata"
-msgstr "杜比视界元数据"
-
-msgctxt "#32390"
-msgid "OK: open section — Back: TinyPPI overlay"
-msgstr "OK：打开区块 — 返回：TinyPPI 叠加层"
-
-msgctxt "#32391"
-msgid "DV metadata"
-msgstr "DV 元数据"
-
-msgctxt "#32392"
-msgid "Diagnostic views for reading what a stream actually carries."
-msgstr "用于查看数据流实际携带内容的诊断视图。"
-
-msgctxt "#32393"
-msgid "Dolby Vision metadata view"
-msgstr "杜比视界元数据视图"
-
-msgctxt "#32394"
-msgid "Lets OK open the Dolby Vision metadata view while the TinyPPI overlay is up and a Dolby Vision source is playing. It lists every block the stream's side data carries — the configuration record, the RPU from its header through L11, the trim passes and the static SEIs. OK opens the section under the cursor in a window of its own, Back returns to the TinyPPI overlay. On any other source OK does nothing."
-msgstr "在 TinyPPI 叠加层打开且正在播放杜比视界源时，按 OK 打开杜比视界元数据视图。它会列出该数据流附加数据中的每个块——配置记录、从头部到 L11 的 RPU、修剪参数以及静态 SEI。按 OK 在独立窗口中打开所选区块，按返回回到 TinyPPI 叠加层。其他源按 OK 无效。"
-
 msgctxt "#32395"
 msgid "Changed values"
 msgstr "变化的数值"
@@ -1228,80 +1204,8 @@ msgid "Move with the arrow keys"
 msgstr "使用方向键移动"
 
 msgctxt "#32399"
-msgid "Lets the arrow keys on the remote move the TinyPPI overlay around the screen while it is open. The move is not saved: the next launch starts from the position configured above."
-msgstr "允许在 TinyPPI 叠加层打开时，用遥控器的方向键在屏幕上移动它。移动结果不会保存：下次打开时仍使用上面设置的位置。"
-
-msgctxt "#32401"
-msgid "Color laid over the whole screen behind the Dolby Vision metadata view. Raise its opacity to dim the picture behind it."
-msgstr "在杜比视界元数据视图后面覆盖整个屏幕的颜色。提高其不透明度可让后面的画面变暗。"
-
-msgctxt "#32403"
-msgid "Background color of the metadata view itself."
-msgstr "元数据视图本身的背景颜色。"
-
-msgctxt "#32405"
-msgid "Color of the heading at the top of the metadata view."
-msgstr "元数据视图顶部标题的颜色。"
-
-msgctxt "#32407"
-msgid "Color of the Dolby Vision logo in the top right corner."
-msgstr "右上角杜比视界标志的颜色。"
-
-msgctxt "#32409"
-msgid "Color of the section headings, such as RPU or L2 — Trims."
-msgstr "章节标题的颜色，例如 RPU 或 L2 — Trims。"
-
-msgctxt "#32410"
-msgid "Column headings"
-msgstr "列标题"
-
-msgctxt "#32411"
-msgid "Color of the column headings in the trim tables: Slope, Offset, Power and the rest."
-msgstr "trim 表格中列标题的颜色：Slope、Offset、Power 等。"
-
-msgctxt "#32413"
-msgid "Color of the field names down the left column."
-msgstr "左列字段名称的颜色。"
-
-msgctxt "#32415"
-msgid "Color of the readings. A value that just changed is written in the \"Changed values\" color instead, for as long as it keeps changing."
-msgstr "读数的颜色。刚刚变化的数值会改用\"变化的数值\"颜色显示，直到它不再变化为止。"
-
-msgctxt "#32417"
-msgid "Color of the rules under the section headings and above and below the list."
-msgstr "章节标题下方以及列表上下分隔线的颜色。"
-
-msgctxt "#32419"
-msgid "Color of the bar behind the row the selection is on."
-msgstr "选中所在行背后横条的颜色。"
-
-msgctxt "#32420"
-msgid "Scrollbar"
-msgstr "滚动条"
-
-msgctxt "#32421"
-msgid "Color of the scrollbar down the right-hand edge."
-msgstr "右侧边缘滚动条的颜色。"
-
-msgctxt "#32422"
-msgid "Key hint"
-msgstr "按键提示"
-
-msgctxt "#32423"
-msgid "Color of the line at the bottom naming what the keys do."
-msgstr "底部说明按键功能那一行的颜色。"
-
-msgctxt "#32424"
-msgid "Back: metadata list"
-msgstr "返回：元数据列表"
-
-msgctxt "#32425"
-msgid "RPU MDL"
-msgstr "RPU MDL"
-
-msgctxt "#32426"
-msgid "RPU MaxCLL/FALL"
-msgstr "RPU MaxCLL/FALL"
+msgid "Lets the arrow keys on the remote move the signde PPI overlay around the screen while it is open. The move is not saved: the next launch starts from the position configured above."
+msgstr "允许在 signde PPI 叠加层打开时，用遥控器的方向键在屏幕上移动它。移动结果不会保存：下次打开时仍使用上面设置的位置。"
 
 msgctxt "#32427"
 msgid "Highlight duration"
@@ -1314,174 +1218,6 @@ msgstr "刚刚变化的数值保持高亮颜色的时长（毫秒）。无论此
 msgctxt "#32429"
 msgid "Input"
 msgstr "输入"
-
-msgctxt "#32430"
-msgid "Dashboard"
-msgstr "仪表板"
-
-msgctxt "#32431"
-msgid "A live view of the playing stream in a browser on your phone or laptop, so the picture itself stays untouched."
-msgstr "在手机或笔记本电脑的浏览器中实时查看正在播放的流，而画面本身保持不变。"
-
-msgctxt "#32432"
-msgid "Enable web dashboard"
-msgstr "启用网页仪表板"
-
-msgctxt "#32433"
-msgid "Serves the dashboard on this box's own address. Off by default; once it is on, anything on the same network can reach it, so do not forward its port to the internet."
-msgstr "在本机地址上提供仪表板。默认关闭；开启后同一网络中的任何设备都可访问，因此请勿将其端口转发到互联网。"
-
-msgctxt "#32434"
-msgid "Port"
-msgstr "端口"
-
-msgctxt "#32435"
-msgid "The port the dashboard listens on. Leave 8080 alone - Kodi's own web server usually has it."
-msgstr "仪表板监听的端口。请避开 8080 - 它通常被 Kodi 自带的网页服务器占用。"
-
-msgctxt "#32436"
-msgid "Access token"
-msgstr "访问令牌"
-
-msgctxt "#32437"
-msgid "The key the dashboard asks for. Switching a VS10 mode from the browser always needs it; reading needs it only when the setting below says so."
-msgstr "仪表板要求的密钥。从浏览器切换 VS10 模式始终需要它；仅当下方设置要求时，读取才需要。"
-
-msgctxt "#32438"
-msgid "Generate a new token"
-msgstr "生成新令牌"
-
-msgctxt "#32439"
-msgid "Replaces the token with a fresh one. Every browser still holding the old one is logged out."
-msgstr "将令牌替换为新的。仍持有旧令牌的浏览器都会被登出。"
-
-msgctxt "#32440"
-msgid "Require the token for reading too"
-msgstr "读取也需要令牌"
-
-msgctxt "#32441"
-msgid "Asks for the token before showing anything at all, not just before switching a mode. Turn this on when the box is on a shared network."
-msgstr "在显示任何内容之前就要求令牌，而不仅仅是在切换之前。若本机位于共享网络，请开启此项。"
-
-msgctxt "#32442"
-msgid "Allow VS10 switching from the dashboard"
-msgstr "允许从仪表板切换 VS10"
-
-msgctxt "#32443"
-msgid "Shows the VS10 output modes for the playing source in the browser, so the mode can be switched from a phone. The token is required either way."
-msgstr "在浏览器中显示当前源可用的 VS10 输出模式，以便从手机切换模式。两种情况下均需令牌。"
-
-msgctxt "#32444"
-msgid "Show address and token"
-msgstr "显示地址和令牌"
-
-msgctxt "#32445"
-msgid "Shows the address to open in a browser, together with the current token."
-msgstr "显示要在浏览器中打开的地址以及当前令牌。"
-
-msgctxt "#32446"
-msgid "Web dashboard"
-msgstr "网页仪表板"
-
-msgctxt "#32447"
-msgid "Open this address in a browser on the same network:"
-msgstr "在同一网络的浏览器中打开此地址："
-
-msgctxt "#32448"
-msgid "Connected"
-msgstr "已连接"
-
-msgctxt "#32449"
-msgid "Connecting..."
-msgstr "连接中..."
-
-msgctxt "#32450"
-msgid "Disconnected"
-msgstr "已断开"
-
-msgctxt "#32451"
-msgid "Nothing is playing"
-msgstr "当前没有播放"
-
-msgctxt "#32452"
-msgid "Start a video on the box and everything it carries appears here."
-msgstr "在本机上开始播放视频，其携带的全部信息将显示在这里。"
-
-msgctxt "#32453"
-msgid "Peak"
-msgstr "峰值"
-
-msgctxt "#32454"
-msgid "Average"
-msgstr "平均"
-
-msgctxt "#32455"
-msgid "Frame luminance (L1)"
-msgstr "画面亮度 (L1)"
-
-msgctxt "#32456"
-msgid "Copy report"
-msgstr "复制报告"
-
-msgctxt "#32457"
-msgid "Copied"
-msgstr "已复制"
-
-msgctxt "#32459"
-msgid "Enter the access token"
-msgstr "输入访问令牌"
-
-msgctxt "#32460"
-msgid "You will find it in the add-on settings under Dashboard."
-msgstr "可在插件设置的“仪表板”中找到。"
-
-msgctxt "#32461"
-msgid "Save"
-msgstr "保存"
-
-msgctxt "#32462"
-msgid "Cancel"
-msgstr "取消"
-
-msgctxt "#32463"
-msgid "Wrong or missing token"
-msgstr "令牌缺失或错误"
-
-msgctxt "#32464"
-msgid "Switching..."
-msgstr "正在切换..."
-
-msgctxt "#32465"
-msgid "Switched"
-msgstr "已切换"
-
-msgctxt "#32466"
-msgid "Switching failed"
-msgstr "切换失败"
-
-msgctxt "#32467"
-msgid "VS10 output"
-msgstr "VS10 输出"
-
-msgctxt "#32468"
-msgid "Show the Dolby Vision metadata view"
-msgstr "显示 Dolby Vision 元数据视图"
-
-msgctxt "#32469"
-msgid "Adds the full metadata list to the dashboard - every block the stream's side data carries, the same one the on-screen view shows. It is only built for a Dolby Vision source, and it is the largest thing the page sends, so turn it off on a slow network."
-msgstr "在仪表板中加入完整的元数据列表 - 流的附加数据所携带的每一个区块，与屏幕上的视图相同。仅对 Dolby Vision 源构建，也是页面传输量最大的部分，网络较慢时请关闭。"
-
-msgctxt "#32470"
-msgid "No Dolby Vision metadata"
-msgstr "没有 Dolby Vision 元数据"
-
-msgctxt "#32471"
-msgid "This source carries no Dolby Vision RPU, so there is no metadata to list. The window fills as soon as a Dolby Vision title starts."
-msgstr "该源不携带 Dolby Vision RPU，因此没有可列出的元数据。一旦开始播放 Dolby Vision 片源，此窗口便会填充内容。"
-
-msgctxt "#32472"
-msgid "Dolby Vision"
-msgstr "杜比视界"
 
 msgctxt "#32476"
 msgid "Frame drops"
@@ -1622,3 +1358,19 @@ msgstr "播放器缓存已恢复"
 msgctxt "#32514"
 msgid "Warnings"
 msgstr "警告"
+
+msgctxt "#32539"
+msgid "Player Process Info mode"
+msgstr ""
+
+msgctxt "#32540"
+msgid "Choose the background style used by Player Process Info."
+msgstr ""
+
+msgctxt "#32541"
+msgid "Classic"
+msgstr ""
+
+msgctxt "#32542"
+msgid "Modern"
+msgstr ""

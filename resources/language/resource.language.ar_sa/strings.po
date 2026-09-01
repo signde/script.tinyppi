@@ -20,8 +20,8 @@ msgid "General"
 msgstr "عام"
 
 msgctxt "#32003"
-msgid "TinyPPI settings"
-msgstr "إعدادات TinyPPI"
+msgid "signde PPI settings"
+msgstr "إعدادات signde PPI"
 
 msgctxt "#32005"
 msgid "Decoder"
@@ -64,8 +64,8 @@ msgid "Show file name"
 msgstr "عرض اسم الملف"
 
 msgctxt "#32021"
-msgid "Show the currently playing file name in TinyPPI."
-msgstr "عرض اسم الملف الجاري تشغيله في TinyPPI."
+msgid "Show the currently playing file name in signde PPI."
+msgstr "عرض اسم الملف الجاري تشغيله في signde PPI."
 
 msgctxt "#32022"
 msgid "Video queue / data"
@@ -176,8 +176,8 @@ msgid "Choose what opens when the add-on is launched."
 msgstr "اختر ما يُفتح عند تشغيل الإضافة."
 
 msgctxt "#32094"
-msgid "TinyPPI"
-msgstr "TinyPPI"
+msgid "signde PPI"
+msgstr "signde PPI"
 
 msgctxt "#32095"
 msgid "VS10 dialog"
@@ -188,8 +188,8 @@ msgid "Bit depth"
 msgstr "عمق البِت"
 
 msgctxt "#32101"
-msgid "Customise the TinyPPI overlay colors."
-msgstr "تخصيص ألوان طبقة TinyPPI."
+msgid "Customise the signde PPI overlay colors."
+msgstr "تخصيص ألوان طبقة signde PPI."
 
 msgctxt "#32103"
 msgid "Background"
@@ -878,7 +878,6 @@ msgstr "الملف الشخصي"
 msgctxt "#32291"
 msgid "Version"
 msgstr "الإصدار"
-"
 
 msgctxt "#32296"
 msgid "HDR10 MDL"
@@ -965,12 +964,12 @@ msgid "Color and transparency of the audio format logo."
 msgstr "لون وشفافية شعار صيغة الصوت."
 
 msgctxt "#32319"
-msgid "Show codec logos in the TinyPPI overlay"
-msgstr "عرض شعارات الترميز في طبقة TinyPPI"
+msgid "Show codec logos in the signde PPI overlay"
+msgstr "عرض شعارات الترميز في طبقة signde PPI"
 
 msgctxt "#32320"
-msgid "Also shows the format logos while the TinyPPI info overlay is open."
-msgstr "يعرض أيضًا شعارات الصيغة أثناء فتح طبقة معلومات TinyPPI."
+msgid "Also shows the format logos while the signde PPI info overlay is open."
+msgstr "يعرض أيضًا شعارات الصيغة أثناء فتح طبقة معلومات signde PPI."
 
 msgctxt "#32321"
 msgid "Divider"
@@ -997,8 +996,8 @@ msgid "Video OSD"
 msgstr "OSD الفيديو"
 
 msgctxt "#32327"
-msgid "TinyPPI overlay"
-msgstr "طبقة TinyPPI"
+msgid "signde PPI overlay"
+msgstr "طبقة signde PPI"
 
 msgctxt "#32328"
 msgid "Size (%)"
@@ -1041,8 +1040,8 @@ msgid "Auto-hide"
 msgstr "إخفاء تلقائي"
 
 msgctxt "#32345"
-msgid "Automatically hides the TinyPPI overlay after the selected time (in seconds). 0 = off. Does not apply to the VS10 dialog."
-msgstr "يُخفي طبقة TinyPPI تلقائيًا بعد الوقت المحدّد (بالثواني). 0 = متوقف. لا ينطبق على حوار VS10."
+msgid "Automatically hides the signde PPI overlay after the selected time (in seconds). 0 = off. Does not apply to the VS10 dialog."
+msgstr "يُخفي طبقة signde PPI تلقائيًا بعد الوقت المحدّد (بالثواني). 0 = متوقف. لا ينطبق على حوار VS10."
 
 msgctxt "#32348"
 msgid "Horizontal offset of the channel box"
@@ -1188,30 +1187,6 @@ msgctxt "#32388"
 msgid "Display"
 msgstr "العرض"
 
-msgctxt "#32389"
-msgid "Dolby Vision metadata"
-msgstr "بيانات دولبي فيجن الوصفية"
-
-msgctxt "#32390"
-msgid "OK: open section — Back: TinyPPI overlay"
-msgstr "موافق: فتح القسم — رجوع: واجهة TinyPPI"
-
-msgctxt "#32391"
-msgid "DV metadata"
-msgstr "بيانات DV الوصفية"
-
-msgctxt "#32392"
-msgid "Diagnostic views for reading what a stream actually carries."
-msgstr "طرق عرض تشخيصية لمعرفة ما يحمله الدفق فعليًا."
-
-msgctxt "#32393"
-msgid "Dolby Vision metadata view"
-msgstr "عرض بيانات دولبي فيجن الوصفية"
-
-msgctxt "#32394"
-msgid "Lets OK open the Dolby Vision metadata view while the TinyPPI overlay is up and a Dolby Vision source is playing. It lists every block the stream's side data carries — the configuration record, the RPU from its header through L11, the trim passes and the static SEIs. OK opens the section under the cursor in a window of its own, Back returns to the TinyPPI overlay. On any other source OK does nothing."
-msgstr "يتيح فتح عرض بيانات دولبي فيجن الوصفية بالضغط على موافق أثناء ظهور واجهة TinyPPI وتشغيل مصدر دولبي فيجن. يعرض كل كتلة تحملها البيانات الجانبية للدفق: سجل الإعداد، وRPU من ترويسته حتى L11، وتمريرات الضبط، وبيانات SEI الثابتة. موافق يفتح القسم المحدد في نافذة خاصة به، ورجوع يعيدك إلى واجهة TinyPPI. مع المصادر الأخرى لا يفعل موافق شيئًا."
-
 msgctxt "#32395"
 msgid "Changed values"
 msgstr "القيم المتغيّرة"
@@ -1229,80 +1204,8 @@ msgid "Move with the arrow keys"
 msgstr "التحريك بأزرار الاتجاهات"
 
 msgctxt "#32399"
-msgid "Lets the arrow keys on the remote move the TinyPPI overlay around the screen while it is open. The move is not saved: the next launch starts from the position configured above."
-msgstr "يتيح تحريك طبقة TinyPPI على الشاشة بأزرار الاتجاهات في جهاز التحكم أثناء فتحها. لا يُحفظ التحريك: يبدأ التشغيل التالي من الموضع المضبوط أعلاه."
-
-msgctxt "#32401"
-msgid "Color laid over the whole screen behind the Dolby Vision metadata view. Raise its opacity to dim the picture behind it."
-msgstr "لون يُوضع على الشاشة بأكملها خلف عرض بيانات دولبي فيجن الوصفية. ارفع درجة عتامته لتعتيم الصورة خلفه."
-
-msgctxt "#32403"
-msgid "Background color of the metadata view itself."
-msgstr "لون خلفية عرض البيانات الوصفية نفسه."
-
-msgctxt "#32405"
-msgid "Color of the heading at the top of the metadata view."
-msgstr "لون العنوان في أعلى عرض البيانات الوصفية."
-
-msgctxt "#32407"
-msgid "Color of the Dolby Vision logo in the top right corner."
-msgstr "لون شعار دولبي فيجن في الزاوية العلوية اليمنى."
-
-msgctxt "#32409"
-msgid "Color of the section headings, such as RPU or L2 — Trims."
-msgstr "لون عناوين الأقسام، مثل RPU أو L2 — Trims."
-
-msgctxt "#32410"
-msgid "Column headings"
-msgstr "عناوين الأعمدة"
-
-msgctxt "#32411"
-msgid "Color of the column headings in the trim tables: Slope, Offset, Power and the rest."
-msgstr "لون عناوين الأعمدة في جداول التعديل: Slope وOffset وPower وبقيتها."
-
-msgctxt "#32413"
-msgid "Color of the field names down the left column."
-msgstr "لون أسماء الحقول في العمود الأيسر."
-
-msgctxt "#32415"
-msgid "Color of the readings. A value that just changed is written in the \"Changed values\" color instead, for as long as it keeps changing."
-msgstr "لون القراءات. القيمة التي تغيّرت للتو تُكتب بلون \"القيم المتغيّرة\" بدلًا من ذلك، ما دامت تتغيّر."
-
-msgctxt "#32417"
-msgid "Color of the rules under the section headings and above and below the list."
-msgstr "لون الخطوط أسفل عناوين الأقسام وفوق القائمة وتحتها."
-
-msgctxt "#32419"
-msgid "Color of the bar behind the row the selection is on."
-msgstr "لون الشريط خلف الصف الذي يقع عليه التحديد."
-
-msgctxt "#32420"
-msgid "Scrollbar"
-msgstr "شريط التمرير"
-
-msgctxt "#32421"
-msgid "Color of the scrollbar down the right-hand edge."
-msgstr "لون شريط التمرير على الحافة اليمنى."
-
-msgctxt "#32422"
-msgid "Key hint"
-msgstr "تلميح المفاتيح"
-
-msgctxt "#32423"
-msgid "Color of the line at the bottom naming what the keys do."
-msgstr "لون السطر في الأسفل الذي يذكر وظيفة المفاتيح."
-
-msgctxt "#32424"
-msgid "Back: metadata list"
-msgstr "رجوع: قائمة البيانات الوصفية"
-
-msgctxt "#32425"
-msgid "RPU MDL"
-msgstr "RPU MDL"
-
-msgctxt "#32426"
-msgid "RPU MaxCLL/FALL"
-msgstr "RPU MaxCLL/FALL"
+msgid "Lets the arrow keys on the remote move the signde PPI overlay around the screen while it is open. The move is not saved: the next launch starts from the position configured above."
+msgstr "يتيح تحريك طبقة signde PPI على الشاشة بأزرار الاتجاهات في جهاز التحكم أثناء فتحها. لا يُحفظ التحريك: يبدأ التشغيل التالي من الموضع المضبوط أعلاه."
 
 msgctxt "#32427"
 msgid "Highlight duration"
@@ -1315,174 +1218,6 @@ msgstr "المدة التي تبقى فيها القراءة التي تغيّر
 msgctxt "#32429"
 msgid "Input"
 msgstr "الإدخال"
-
-msgctxt "#32430"
-msgid "Dashboard"
-msgstr "لوحة المعلومات"
-
-msgctxt "#32431"
-msgid "A live view of the playing stream in a browser on your phone or laptop, so the picture itself stays untouched."
-msgstr "عرض مباشر للمحتوى قيد التشغيل في متصفح على هاتفك أو حاسوبك، مع بقاء الصورة نفسها دون تغيير."
-
-msgctxt "#32432"
-msgid "Enable web dashboard"
-msgstr "تفعيل لوحة المعلومات على الويب"
-
-msgctxt "#32433"
-msgid "Serves the dashboard on this box's own address. Off by default; once it is on, anything on the same network can reach it, so do not forward its port to the internet."
-msgstr "تقدّم اللوحة على عنوان هذا الجهاز. معطّلة افتراضيًا؛ وعند تفعيلها يمكن لأي جهاز على الشبكة نفسها الوصول إليها، لذا لا تُحوِّل منفذها إلى الإنترنت."
-
-msgctxt "#32434"
-msgid "Port"
-msgstr "المنفذ"
-
-msgctxt "#32435"
-msgid "The port the dashboard listens on. Leave 8080 alone - Kodi's own web server usually has it."
-msgstr "المنفذ الذي تستمع عليه اللوحة. تجنّب 8080 - فعادةً ما يشغله خادم الويب الخاص بـ Kodi."
-
-msgctxt "#32436"
-msgid "Access token"
-msgstr "رمز الوصول"
-
-msgctxt "#32437"
-msgid "The key the dashboard asks for. Switching a VS10 mode from the browser always needs it; reading needs it only when the setting below says so."
-msgstr "المفتاح الذي تطلبه اللوحة. تبديل وضع VS10 من المتصفح يحتاجه دائمًا، أما القراءة فتحتاجه فقط عند تفعيل الإعداد أدناه."
-
-msgctxt "#32438"
-msgid "Generate a new token"
-msgstr "إنشاء رمز جديد"
-
-msgctxt "#32439"
-msgid "Replaces the token with a fresh one. Every browser still holding the old one is logged out."
-msgstr "يستبدل الرمز بآخر جديد، فيخرج كل متصفح ما زال يحمل القديم."
-
-msgctxt "#32440"
-msgid "Require the token for reading too"
-msgstr "طلب الرمز للقراءة أيضًا"
-
-msgctxt "#32441"
-msgid "Asks for the token before showing anything at all, not just before switching a mode. Turn this on when the box is on a shared network."
-msgstr "يطلب الرمز قبل عرض أي شيء، لا قبل التبديل فقط. فعّله إذا كان الجهاز على شبكة مشتركة."
-
-msgctxt "#32442"
-msgid "Allow VS10 switching from the dashboard"
-msgstr "السماح بتبديل VS10 من اللوحة"
-
-msgctxt "#32443"
-msgid "Shows the VS10 output modes for the playing source in the browser, so the mode can be switched from a phone. The token is required either way."
-msgstr "يعرض أوضاع إخراج VS10 للمصدر قيد التشغيل في المتصفح، فيمكن التبديل من الهاتف. الرمز مطلوب في الحالتين."
-
-msgctxt "#32444"
-msgid "Show address and token"
-msgstr "عرض العنوان والرمز"
-
-msgctxt "#32445"
-msgid "Shows the address to open in a browser, together with the current token."
-msgstr "يعرض العنوان الذي يُفتح في المتصفح مع الرمز الحالي."
-
-msgctxt "#32446"
-msgid "Web dashboard"
-msgstr "لوحة المعلومات على الويب"
-
-msgctxt "#32447"
-msgid "Open this address in a browser on the same network:"
-msgstr "افتح هذا العنوان في متصفح على الشبكة نفسها:"
-
-msgctxt "#32448"
-msgid "Connected"
-msgstr "متصل"
-
-msgctxt "#32449"
-msgid "Connecting..."
-msgstr "جارٍ الاتصال..."
-
-msgctxt "#32450"
-msgid "Disconnected"
-msgstr "غير متصل"
-
-msgctxt "#32451"
-msgid "Nothing is playing"
-msgstr "لا يوجد تشغيل"
-
-msgctxt "#32452"
-msgid "Start a video on the box and everything it carries appears here."
-msgstr "شغّل فيديو على الجهاز ليظهر هنا كل ما يحمله."
-
-msgctxt "#32453"
-msgid "Peak"
-msgstr "الذروة"
-
-msgctxt "#32454"
-msgid "Average"
-msgstr "المتوسط"
-
-msgctxt "#32455"
-msgid "Frame luminance (L1)"
-msgstr "سطوع الإطار (L1)"
-
-msgctxt "#32456"
-msgid "Copy report"
-msgstr "نسخ التقرير"
-
-msgctxt "#32457"
-msgid "Copied"
-msgstr "تم النسخ"
-
-msgctxt "#32459"
-msgid "Enter the access token"
-msgstr "أدخل رمز الوصول"
-
-msgctxt "#32460"
-msgid "You will find it in the add-on settings under Dashboard."
-msgstr "تجده في إعدادات الإضافة ضمن لوحة المعلومات."
-
-msgctxt "#32461"
-msgid "Save"
-msgstr "حفظ"
-
-msgctxt "#32462"
-msgid "Cancel"
-msgstr "إلغاء"
-
-msgctxt "#32463"
-msgid "Wrong or missing token"
-msgstr "الرمز مفقود أو غير صحيح"
-
-msgctxt "#32464"
-msgid "Switching..."
-msgstr "جارٍ التبديل..."
-
-msgctxt "#32465"
-msgid "Switched"
-msgstr "تم التبديل"
-
-msgctxt "#32466"
-msgid "Switching failed"
-msgstr "فشل التبديل"
-
-msgctxt "#32467"
-msgid "VS10 output"
-msgstr "إخراج VS10"
-
-msgctxt "#32468"
-msgid "Show the Dolby Vision metadata view"
-msgstr "عرض قائمة بيانات Dolby Vision الوصفية"
-
-msgctxt "#32469"
-msgid "Adds the full metadata list to the dashboard - every block the stream's side data carries, the same one the on-screen view shows. It is only built for a Dolby Vision source, and it is the largest thing the page sends, so turn it off on a slow network."
-msgstr "يضيف قائمة البيانات الوصفية الكاملة إلى اللوحة - كل كتلة تحملها البيانات الجانبية للدفق، وهي نفسها التي تعرضها الشاشة. تُبنى لمصدر Dolby Vision فقط، وهي أكبر ما ترسله الصفحة، لذا عطّلها على شبكة بطيئة."
-
-msgctxt "#32470"
-msgid "No Dolby Vision metadata"
-msgstr "لا توجد بيانات Dolby Vision وصفية"
-
-msgctxt "#32471"
-msgid "This source carries no Dolby Vision RPU, so there is no metadata to list. The window fills as soon as a Dolby Vision title starts."
-msgstr "لا يحمل هذا المصدر وحدة RPU الخاصة بـ Dolby Vision، فلا شيء لعرضه. تمتلئ النافذة بمجرد بدء تشغيل عنوان بتقنية Dolby Vision."
-
-msgctxt "#32472"
-msgid "Dolby Vision"
-msgstr "دولبي فيجن"
 
 msgctxt "#32476"
 msgid "Frame drops"
@@ -1623,3 +1358,19 @@ msgstr "تعافت ذاكرة المشغل"
 msgctxt "#32514"
 msgid "Warnings"
 msgstr "تحذيرات"
+
+msgctxt "#32539"
+msgid "Player Process Info mode"
+msgstr ""
+
+msgctxt "#32540"
+msgid "Choose the background style used by Player Process Info."
+msgstr ""
+
+msgctxt "#32541"
+msgid "Classic"
+msgstr ""
+
+msgctxt "#32542"
+msgid "Modern"
+msgstr ""

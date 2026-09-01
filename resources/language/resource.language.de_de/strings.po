@@ -20,8 +20,8 @@ msgid "General"
 msgstr "Allgemein"
 
 msgctxt "#32003"
-msgid "TinyPPI settings"
-msgstr "TinyPPI-Einstellungen"
+msgid "signde PPI settings"
+msgstr "signde PPI-Einstellungen"
 
 msgctxt "#32005"
 msgid "Decoder"
@@ -64,8 +64,8 @@ msgid "Show file name"
 msgstr "Dateiname anzeigen"
 
 msgctxt "#32021"
-msgid "Show the currently playing file name in TinyPPI."
-msgstr "Zeigt den Dateinamen der aktuellen Wiedergabe in TinyPPI an."
+msgid "Show the currently playing file name in signde PPI."
+msgstr "Zeigt den Dateinamen der aktuellen Wiedergabe in signde PPI an."
 
 msgctxt "#32022"
 msgid "Video queue / data"
@@ -176,8 +176,8 @@ msgid "Choose what opens when the add-on is launched."
 msgstr "Wähle aus, was beim Start des Add-ons geöffnet wird."
 
 msgctxt "#32094"
-msgid "TinyPPI"
-msgstr "TinyPPI"
+msgid "signde PPI"
+msgstr "signde PPI"
 
 msgctxt "#32095"
 msgid "VS10 dialog"
@@ -188,8 +188,8 @@ msgid "Bit depth"
 msgstr "Bittiefe"
 
 msgctxt "#32101"
-msgid "Customise the TinyPPI overlay colors."
-msgstr "Passe die Farben des TinyPPI-Overlays an."
+msgid "Customise the signde PPI overlay colors."
+msgstr "Passe die Farben des signde PPI-Overlays an."
 
 msgctxt "#32103"
 msgid "Background"
@@ -964,12 +964,12 @@ msgid "Color and transparency of the audio format logo."
 msgstr "Farbe und Transparenz des Audio-Format-Logos."
 
 msgctxt "#32319"
-msgid "Show codec logos in the TinyPPI overlay"
-msgstr "Codec-Logos im TinyPPI-Overlay anzeigen"
+msgid "Show codec logos in the signde PPI overlay"
+msgstr "Codec-Logos im signde PPI-Overlay anzeigen"
 
 msgctxt "#32320"
-msgid "Also shows the format logos while the TinyPPI info overlay is open."
-msgstr "Zeigt die Format-Logos zusätzlich an, während das TinyPPI-Info-Overlay geöffnet ist."
+msgid "Also shows the format logos while the signde PPI info overlay is open."
+msgstr "Zeigt die Format-Logos zusätzlich an, während das signde PPI-Info-Overlay geöffnet ist."
 
 msgctxt "#32321"
 msgid "Divider"
@@ -996,8 +996,8 @@ msgid "Video OSD"
 msgstr "Video-OSD"
 
 msgctxt "#32327"
-msgid "TinyPPI overlay"
-msgstr "TinyPPI-Overlay"
+msgid "signde PPI overlay"
+msgstr "signde PPI-Overlay"
 
 msgctxt "#32328"
 msgid "Size (%)"
@@ -1040,8 +1040,8 @@ msgid "Auto-hide"
 msgstr "Automatisch ausblenden"
 
 msgctxt "#32345"
-msgid "Automatically hides the TinyPPI overlay after the selected time (in seconds). 0 = off. Does not apply to the VS10 dialog."
-msgstr "Blendet das TinyPPI-Overlay nach der eingestellten Zeit (in Sekunden) automatisch aus. 0 = Aus. Gilt nicht für den VS10-Dialog."
+msgid "Automatically hides the signde PPI overlay after the selected time (in seconds). 0 = off. Does not apply to the VS10 dialog."
+msgstr "Blendet das signde PPI-Overlay nach der eingestellten Zeit (in Sekunden) automatisch aus. 0 = Aus. Gilt nicht für den VS10-Dialog."
 
 msgctxt "#32348"
 msgid "Horizontal offset of the channel box"
@@ -1187,30 +1187,6 @@ msgctxt "#32388"
 msgid "Display"
 msgstr "Anzeige"
 
-msgctxt "#32389"
-msgid "Dolby Vision metadata"
-msgstr "Dolby-Vision-Metadaten"
-
-msgctxt "#32390"
-msgid "OK: open section — Back: TinyPPI overlay"
-msgstr "OK: Bereich öffnen — Zurück: TinyPPI-Overlay"
-
-msgctxt "#32391"
-msgid "DV metadata"
-msgstr "DV-Metadaten"
-
-msgctxt "#32392"
-msgid "Diagnostic views for reading what a stream actually carries."
-msgstr "Diagnoseansichten, die zeigen, was ein Stream tatsächlich mitbringt."
-
-msgctxt "#32393"
-msgid "Dolby Vision metadata view"
-msgstr "Dolby-Vision-Metadatenansicht"
-
-msgctxt "#32394"
-msgid "Lets OK open the Dolby Vision metadata view while the TinyPPI overlay is up and a Dolby Vision source is playing. It lists every block the stream's side data carries — the configuration record, the RPU from its header through L11, the trim passes and the static SEIs. OK opens the section under the cursor in a window of its own, Back returns to the TinyPPI overlay. On any other source OK does nothing."
-msgstr "Öffnet mit OK die Dolby-Vision-Metadatenansicht, während das TinyPPI-Overlay offen ist und eine Dolby-Vision-Quelle läuft. Sie listet jeden Block auf, den die SideData des Streams enthält – den Konfigurationsdatensatz, die RPU vom Header bis L11, die Trim-Durchgänge und die statischen SEIs. OK öffnet den ausgewählten Bereich in einem eigenen Fenster, Zurück kehrt zum TinyPPI-Overlay zurück. Bei anderen Quellen bewirkt OK nichts."
-
 msgctxt "#32395"
 msgid "Changed values"
 msgstr "Geänderte Werte"
@@ -1228,80 +1204,8 @@ msgid "Move with the arrow keys"
 msgstr "Mit dem Steuerkreuz verschieben"
 
 msgctxt "#32399"
-msgid "Lets the arrow keys on the remote move the TinyPPI overlay around the screen while it is open. The move is not saved: the next launch starts from the position configured above."
-msgstr "Erlaubt es, das TinyPPI-Overlay mit dem Steuerkreuz der Fernbedienung über den Bildschirm zu verschieben, solange es offen ist. Die Verschiebung wird nicht gespeichert – beim nächsten Öffnen gilt wieder die oben eingestellte Position."
-
-msgctxt "#32401"
-msgid "Color laid over the whole screen behind the Dolby Vision metadata view. Raise its opacity to dim the picture behind it."
-msgstr "Farbe, die hinter der Dolby-Vision-Metadatenansicht über den ganzen Bildschirm gelegt wird. Erhöhe die Deckkraft, um das Bild dahinter abzudunkeln."
-
-msgctxt "#32403"
-msgid "Background color of the metadata view itself."
-msgstr "Hintergrundfarbe der Metadatenansicht selbst."
-
-msgctxt "#32405"
-msgid "Color of the heading at the top of the metadata view."
-msgstr "Farbe der Überschrift am oberen Rand der Metadatenansicht."
-
-msgctxt "#32407"
-msgid "Color of the Dolby Vision logo in the top right corner."
-msgstr "Farbe des Dolby-Vision-Logos in der oberen rechten Ecke."
-
-msgctxt "#32409"
-msgid "Color of the section headings, such as RPU or L2 — Trims."
-msgstr "Farbe der Abschnittsüberschriften wie RPU oder L2 — Trims."
-
-msgctxt "#32410"
-msgid "Column headings"
-msgstr "Spaltenüberschriften"
-
-msgctxt "#32411"
-msgid "Color of the column headings in the trim tables: Slope, Offset, Power and the rest."
-msgstr "Farbe der Spaltenüberschriften in den Trim-Tabellen: Slope, Offset, Power und die übrigen."
-
-msgctxt "#32413"
-msgid "Color of the field names down the left column."
-msgstr "Farbe der Feldnamen in der linken Spalte."
-
-msgctxt "#32415"
-msgid "Color of the readings. A value that just changed is written in the \"Changed values\" color instead, for as long as it keeps changing."
-msgstr "Farbe der Messwerte. Ein Wert, der sich gerade geändert hat, wird stattdessen in der Farbe unter \"Geänderte Werte\" geschrieben, solange er sich weiter ändert."
-
-msgctxt "#32417"
-msgid "Color of the rules under the section headings and above and below the list."
-msgstr "Farbe der Linien unter den Abschnittsüberschriften sowie oberhalb und unterhalb der Liste."
-
-msgctxt "#32419"
-msgid "Color of the bar behind the row the selection is on."
-msgstr "Farbe des Balkens hinter der Zeile, auf der die Auswahl steht."
-
-msgctxt "#32420"
-msgid "Scrollbar"
-msgstr "Bildlaufleiste"
-
-msgctxt "#32421"
-msgid "Color of the scrollbar down the right-hand edge."
-msgstr "Farbe der Bildlaufleiste am rechten Rand."
-
-msgctxt "#32422"
-msgid "Key hint"
-msgstr "Tastenhinweis"
-
-msgctxt "#32423"
-msgid "Color of the line at the bottom naming what the keys do."
-msgstr "Farbe der Zeile am unteren Rand, die die Tastenbelegung nennt."
-
-msgctxt "#32424"
-msgid "Back: metadata list"
-msgstr "Zurück: Metadatenliste"
-
-msgctxt "#32425"
-msgid "RPU MDL"
-msgstr "RPU MDL"
-
-msgctxt "#32426"
-msgid "RPU MaxCLL/FALL"
-msgstr "RPU MaxCLL/FALL"
+msgid "Lets the arrow keys on the remote move the signde PPI overlay around the screen while it is open. The move is not saved: the next launch starts from the position configured above."
+msgstr "Erlaubt es, das signde PPI-Overlay mit dem Steuerkreuz der Fernbedienung über den Bildschirm zu verschieben, solange es offen ist. Die Verschiebung wird nicht gespeichert – beim nächsten Öffnen gilt wieder die oben eingestellte Position."
 
 msgctxt "#32427"
 msgid "Highlight duration"
@@ -1314,174 +1218,6 @@ msgstr "Wie lange ein gerade geänderter Wert in der Hervorhebungsfarbe bleibt, 
 msgctxt "#32429"
 msgid "Input"
 msgstr "Eingang"
-
-msgctxt "#32430"
-msgid "Dashboard"
-msgstr "Dashboard"
-
-msgctxt "#32431"
-msgid "A live view of the playing stream in a browser on your phone or laptop, so the picture itself stays untouched."
-msgstr "Eine Live-Ansicht des laufenden Streams im Browser auf Handy oder Laptop, während das Bild selbst unangetastet bleibt."
-
-msgctxt "#32432"
-msgid "Enable web dashboard"
-msgstr "Web-Dashboard aktivieren"
-
-msgctxt "#32433"
-msgid "Serves the dashboard on this box's own address. Off by default; once it is on, anything on the same network can reach it, so do not forward its port to the internet."
-msgstr "Stellt das Dashboard unter der Adresse dieser Box bereit. Standardmäßig aus; einmal eingeschaltet ist es für alles im selben Netzwerk erreichbar - den Port also nicht ins Internet weiterleiten."
-
-msgctxt "#32434"
-msgid "Port"
-msgstr "Port"
-
-msgctxt "#32435"
-msgid "The port the dashboard listens on. Leave 8080 alone - Kodi's own web server usually has it."
-msgstr "Der Port, auf dem das Dashboard lauscht. 8080 besser freilassen - den belegt meist Kodis eigener Webserver."
-
-msgctxt "#32436"
-msgid "Access token"
-msgstr "Zugriffstoken"
-
-msgctxt "#32437"
-msgid "The key the dashboard asks for. Switching a VS10 mode from the browser always needs it; reading needs it only when the setting below says so."
-msgstr "Der Schlüssel, nach dem das Dashboard fragt. Zum Umschalten eines VS10-Modus aus dem Browser wird er immer gebraucht, zum Lesen nur, wenn die Einstellung unten es verlangt."
-
-msgctxt "#32438"
-msgid "Generate a new token"
-msgstr "Neues Token erzeugen"
-
-msgctxt "#32439"
-msgid "Replaces the token with a fresh one. Every browser still holding the old one is logged out."
-msgstr "Ersetzt das Token durch ein frisches. Jeder Browser, der noch das alte hat, ist damit ausgesperrt."
-
-msgctxt "#32440"
-msgid "Require the token for reading too"
-msgstr "Token auch zum Lesen verlangen"
-
-msgctxt "#32441"
-msgid "Asks for the token before showing anything at all, not just before switching a mode. Turn this on when the box is on a shared network."
-msgstr "Fragt das Token schon ab, bevor überhaupt etwas angezeigt wird - nicht erst vor dem Umschalten. Sinnvoll, wenn die Box in einem geteilten Netzwerk steht."
-
-msgctxt "#32442"
-msgid "Allow VS10 switching from the dashboard"
-msgstr "VS10-Umschaltung im Dashboard erlauben"
-
-msgctxt "#32443"
-msgid "Shows the VS10 output modes for the playing source in the browser, so the mode can be switched from a phone. The token is required either way."
-msgstr "Zeigt die VS10-Ausgabemodi der laufenden Quelle im Browser, sodass sich der Modus vom Handy aus umschalten lässt. Das Token wird in jedem Fall verlangt."
-
-msgctxt "#32444"
-msgid "Show address and token"
-msgstr "Adresse und Token anzeigen"
-
-msgctxt "#32445"
-msgid "Shows the address to open in a browser, together with the current token."
-msgstr "Zeigt die Adresse zum Öffnen im Browser zusammen mit dem aktuellen Token."
-
-msgctxt "#32446"
-msgid "Web dashboard"
-msgstr "Web-Dashboard"
-
-msgctxt "#32447"
-msgid "Open this address in a browser on the same network:"
-msgstr "Diese Adresse in einem Browser im selben Netzwerk öffnen:"
-
-msgctxt "#32448"
-msgid "Connected"
-msgstr "Verbunden"
-
-msgctxt "#32449"
-msgid "Connecting..."
-msgstr "Verbinde ..."
-
-msgctxt "#32450"
-msgid "Disconnected"
-msgstr "Getrennt"
-
-msgctxt "#32451"
-msgid "Nothing is playing"
-msgstr "Es läuft nichts"
-
-msgctxt "#32452"
-msgid "Start a video on the box and everything it carries appears here."
-msgstr "Starte ein Video auf der Box, dann erscheint hier alles, was es mitbringt."
-
-msgctxt "#32453"
-msgid "Peak"
-msgstr "Spitze"
-
-msgctxt "#32454"
-msgid "Average"
-msgstr "Durchschnitt"
-
-msgctxt "#32455"
-msgid "Frame luminance (L1)"
-msgstr "Bildhelligkeit (L1)"
-
-msgctxt "#32456"
-msgid "Copy report"
-msgstr "Bericht kopieren"
-
-msgctxt "#32457"
-msgid "Copied"
-msgstr "Kopiert"
-
-msgctxt "#32459"
-msgid "Enter the access token"
-msgstr "Zugriffstoken eingeben"
-
-msgctxt "#32460"
-msgid "You will find it in the add-on settings under Dashboard."
-msgstr "Zu finden in den Addon-Einstellungen unter Dashboard."
-
-msgctxt "#32461"
-msgid "Save"
-msgstr "Speichern"
-
-msgctxt "#32462"
-msgid "Cancel"
-msgstr "Abbrechen"
-
-msgctxt "#32463"
-msgid "Wrong or missing token"
-msgstr "Token fehlt oder ist falsch"
-
-msgctxt "#32464"
-msgid "Switching..."
-msgstr "Wird umgeschaltet ..."
-
-msgctxt "#32465"
-msgid "Switched"
-msgstr "Umgeschaltet"
-
-msgctxt "#32466"
-msgid "Switching failed"
-msgstr "Umschalten fehlgeschlagen"
-
-msgctxt "#32467"
-msgid "VS10 output"
-msgstr "VS10"
-
-msgctxt "#32468"
-msgid "Show the Dolby Vision metadata view"
-msgstr "Dolby-Vision-Metadatenansicht anzeigen"
-
-msgctxt "#32469"
-msgid "Adds the full metadata list to the dashboard - every block the stream's side data carries, the same one the on-screen view shows. It is only built for a Dolby Vision source, and it is the largest thing the page sends, so turn it off on a slow network."
-msgstr "Fügt dem Dashboard die vollständige Metadatenliste hinzu - jeden Block, den die Side Data des Streams mitbringt, dieselbe wie in der Ansicht auf dem Bildschirm. Sie wird nur für eine Dolby-Vision-Quelle gebaut und ist das Größte, was die Seite überträgt; in einem langsamen Netzwerk also besser aus."
-
-msgctxt "#32470"
-msgid "No Dolby Vision metadata"
-msgstr "Keine Dolby-Vision-Metadaten"
-
-msgctxt "#32471"
-msgid "This source carries no Dolby Vision RPU, so there is no metadata to list. The window fills as soon as a Dolby Vision title starts."
-msgstr "Diese Quelle bringt keinen Dolby-Vision-RPU mit, es gibt also nichts aufzulisten. Das Fenster füllt sich, sobald ein Dolby-Vision-Titel startet."
-
-msgctxt "#32472"
-msgid "Dolby Vision"
-msgstr "Dolby Vision"
 
 msgctxt "#32476"
 msgid "Frame drops"
@@ -1622,3 +1358,19 @@ msgstr "Playercache erholt"
 msgctxt "#32514"
 msgid "Warnings"
 msgstr "Warnungen"
+
+msgctxt "#32539"
+msgid "Player Process Info mode"
+msgstr ""
+
+msgctxt "#32540"
+msgid "Choose the background style used by Player Process Info."
+msgstr ""
+
+msgctxt "#32541"
+msgid "Classic"
+msgstr ""
+
+msgctxt "#32542"
+msgid "Modern"
+msgstr ""
