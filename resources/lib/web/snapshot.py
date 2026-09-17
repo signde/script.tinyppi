@@ -24,6 +24,7 @@ import zlib
 import xbmc
 import xbmcaddon
 import xbmcgui
+from core import vs10 as vs10_modes
 from core.maps import AUDIO_LOGO_MAP, HDR_LOGO_MAP, IMAX_LOGO_MAP
 from core.utils import (
     PROP_EFFECTIVE_HDR_TYPE,
@@ -1426,9 +1427,11 @@ def vs10_state(source: str, playing: bool = True,
                hdr10plus: bool = False) -> dict:
     """What the dashboard needs to draw its VS10 controls: the buttons that
     apply to the playing source, and the output the driver is in now."""
+    output = vs10_modes.interlock_output() if playing else None
     return {
         "options": [{"mode": mode, "label": label}
-                    for mode, label in _options_for(source, playing, hdr10plus)],
+                    for mode, label in _options_for(source, playing, hdr10plus)
+                    if vs10_modes.mode_allowed(mode, output)],
         "output":  info("Player.Process(amlogic.eoft_gamut)").split(",")[0].strip(),
     }
 
@@ -1443,8 +1446,7 @@ _KNOWN_MODES = frozenset(
 
 
 def apply_mode(mode: str) -> bool:
-    """Apply a VS10 mode by name, returning False for one the dashboard does
-    not offer.
+    """Dispatch an available VS10 mode, rejecting an unsafe direct transition.
 
     Goes through the documented ``RunScript`` entry point rather than calling
     ``ui.mode_select`` here: that runs the switch in its own interpreter, the
@@ -1454,6 +1456,8 @@ def apply_mode(mode: str) -> bool:
     name itself on the far side.
     """
     if mode not in _KNOWN_MODES:
+        return False
+    if not vs10_modes.mode_allowed(mode, vs10_modes.interlock_output()):
         return False
     xbmc.executebuiltin(f"RunScript(script.tinyppi,run_mode,{mode})")
     return True

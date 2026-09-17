@@ -1782,3 +1782,8 @@ msgstr ""
 msgctxt "#32554"
 msgid "%s h"
 msgstr ""
+
+# VS10 output switching
+msgctxt "#32555"
+msgid "Select SDR first before switching between HDR10 and Dolby Vision."
+msgstr ""

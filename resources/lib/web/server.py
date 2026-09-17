@@ -883,7 +883,10 @@ class _Handler(BaseHTTPRequestHandler):
         if route == "/api/mode":
             mode = str(payload.get("mode", "")).strip()
             if not apply_mode(mode):
-                self._send_error_json(HTTPStatus.BAD_REQUEST, "unknown mode")
+                self._send_error_json(
+                    HTTPStatus.BAD_REQUEST,
+                    "mode unavailable; select SDR before switching HDR10/Dolby Vision",
+                )
                 return
             _log(f"VS10 mode '{mode}' requested from {self.client_address[0]}")
             self._send_json({"ok": True, "mode": mode})

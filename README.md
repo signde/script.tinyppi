@@ -614,6 +614,29 @@ that carries HDR10+ alongside its RPU** is drawn the same way: the driver does
 not take a VS10 mode for that hybrid grade, so none is offered. `run_mode`
 still applies one there, and says so in the log.
 
+### Switching between HDR10 and Dolby Vision
+
+On **stock CoreELEC**, select **SDR** first, then select HDR10 or Dolby Vision.
+These are separate operations so the display can reset its colour depth and
+colour space between them. For an SDR source, **Original** is the SDR option; for an HDR10 or Dolby
+Vision source, use its **→ SDR** option.
+
+The dialog disables a direct HDR10 ↔ Dolby Vision switch. The dashboard and
+mobile API omit that option until SDR is selected, and `run_mode` shortcuts
+check the same rule before changing the driver. Both TV-LED and Player-LED
+output changes receive a display reset, including SDR ↔ HDR10 transitions.
+
+On builds with **native VS10 actions**, such as SamuriHL's CE22 build, TinyPPI
+only dispatches `vs10.original`, `vs10.sdr`, `vs10.hdr10` or `vs10.dv`. Kodi
+owns transition checks, driver writes and display resets. TinyPPI does not
+apply the stock SDR-first interlock or fall back to sysfs when an action is
+slow, unchanged or rejected. An accepted request means the action was sent,
+not that the display has completed the switch.
+
+The native SDR action outputs SDR10, so both `sdr8` and `sdr10` use
+`vs10.sdr` on these builds. Stock CE retains the separate SDR8/SDR10 paths.
+All native Original choices use `vs10.original` to restore follow-source.
+
 ### Apply a VS10 output mode directly
 
 Use `run_mode` followed by the mode name to switch the VS10 output mode immediately. This is useful for keymap shortcuts or automation from other addons.
