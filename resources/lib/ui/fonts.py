@@ -16,6 +16,7 @@ import traceback
 
 import xbmc
 import xbmcaddon
+import xbmcvfs
 
 _ADDON     = xbmcaddon.Addon()
 _ADDON_DIR = _ADDON.getAddonInfo("path")
@@ -59,18 +60,8 @@ def _find_font_xml(skin_path: str) -> str | None:
 
 def _get_skin_path() -> str | None:
     """Return the active Kodi skin path (user addons dir first, then system)."""
-    skin_dir   = xbmc.getSkinDir()
-    local_path = os.path.normpath(os.path.join(_ADDONS_ROOT, skin_dir))
-    sys_path   = os.path.normpath(os.path.join(os.getcwd(), "addons", skin_dir))
-
-    _log(f"Skin local: {local_path}")
-    _log(f"Skin sys:   {sys_path}")
-
-    if os.path.exists(local_path):
-        return local_path
-    if os.path.exists(sys_path):
-        return sys_path
-    return None
+    skin_path = xbmcvfs.translatePath("special://skin/")
+    return skin_path if os.path.isdir(skin_path) else None
 
 
 def _spec_entry(spec: dict) -> tuple[str, str, str]:
@@ -253,8 +244,7 @@ def _install_xml(skin_path: str) -> bool:
 
 
 def install_fonts() -> None:
-    """Register the missing font entries in the active skin, reloading it if
-    anything changed.  No-op when they are already there."""
+    """Register missing font entries for the next normal skin load or restart."""
     skin_path = _get_skin_path()
     if not skin_path:
         _log("Skin path not found", xbmc.LOGWARNING)
@@ -274,10 +264,8 @@ def install_fonts() -> None:
         return
 
     if modified:
-        try:
-            xbmc.executebuiltin("ReloadSkin(reload)")
-        except Exception:
-            pass
+        # Reloading can invalidate controls still held by other Python add-ons.
+        _log("Font entries registered; available after the next skin load or Kodi restart")
 
 
 class FontInstallMonitor(xbmc.Monitor):
@@ -296,5 +284,4 @@ class FontInstallMonitor(xbmc.Monitor):
 
 # Kept in a module global rather than discarded: the name is the only reference
 # to the monitor, and without it the instance is collected and stops listening.
-_monitor = FontInstallMonitor()
 install_fonts()

@@ -55,7 +55,8 @@ def info(label: str) -> str:
     """Return the current value of a Kodi InfoLabel (never None)."""
     # Some Kodi builds return an unknown expression verbatim.  Treat that as
     # an empty result rather than publishing it as valid process data.
-    value = xbmc.getInfoLabel(label) or ""
+    from info.firetv import label as firetv_label
+    value = firetv_label(label)
     return "" if value.strip().lower() == label.strip().lower() else value
 
 

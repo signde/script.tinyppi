@@ -255,20 +255,24 @@
 				<visible>String.IsEmpty(Window(10000).Property(SigndeTinyPPI.EffectiveHdrType))</visible>
 				<top>580</top>
 				<left>1355</left>
-					<control type="image">
+					<!-- Speaker graphic disabled for Fire TV:
+<control type="image">
 						<width>495</width>
 						<height>298</height>
 						<aspectratio>keep</aspectratio>
 						<texture colordiffuse="$INFO[Window(10000).Property(SigndeTinyPPI.ChannelLayoutColor)]">$INFO[Window().Property(ChannelLayerVar)]</texture>
 						<aligny>top</aligny>
 					</control>
-					<control type="image">
+-->
+					<!-- Speaker graphic disabled for Fire TV:
+<control type="image">
 						<width>495</width>
 						<height>298</height>
 						<aspectratio>keep</aspectratio>
 						<texture colordiffuse="$INFO[Window(10000).Property(SigndeTinyPPI.ChannelIconColor)]">$INFO[Window().Property(ChannelIconVar)]</texture>
 						<aligny>top</aligny>
 					</control>
+-->
 				</control>
 			</control>
 			
@@ -314,20 +318,24 @@
 				<control type="group">
 				<top>53</top>
 				<left>1485</left>
-					<control type="image">
+					<!-- Speaker graphic disabled for Fire TV:
+<control type="image">
 						<width>400</width>
 						<height>241</height>
 						<aspectratio>keep</aspectratio>
 						<texture colordiffuse="$INFO[Window(10000).Property(SigndeTinyPPI.ChannelLayoutColor)]">$INFO[Window().Property(ChannelLayerVar)]</texture>
 						<aligny>top</aligny>
 					</control>
-					<control type="image">
+-->
+					<!-- Speaker graphic disabled for Fire TV:
+<control type="image">
 						<width>400</width>
 						<height>241</height>
 						<aspectratio>keep</aspectratio>
 						<texture colordiffuse="$INFO[Window(10000).Property(SigndeTinyPPI.ChannelIconColor)]">$INFO[Window().Property(ChannelIconVar)]</texture>
 						<aligny>top</aligny>
 					</control>
+-->
 				</control>
 			</control>
 			
@@ -545,65 +553,20 @@
 						<aligny>top</aligny>
 					</control>
 					
-					<!-- VS10 / VP mode -->
-					<control type="label">
-						<top>30</top>
-						<label>$ADDON[script.signde.tinyppi 32523]:</label>
-						<font>font23_narrow</font>
-						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
-						<aligny>top</aligny>
-					</control>
-					<control type="image">
-						<left>240</left>
-						<top>35</top>
-						<width>24</width>
-						<height>24</height>
-						<texture>icons/check-circle.png</texture>
-						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertYesColor)]</colordiffuse>
-						<visible>String.Contains(Player.Process(amlogic.vs10.mode),Dolby Vision) | String.Contains(Player.Process(amlogic.vs10.mode),HDR10) | String.Contains(Player.Process(amlogic.vs10.mode),SDR)</visible>
-					</control>
-					<control type="image">
-						<left>240</left>
-						<top>35</top>
-						<width>24</width>
-						<height>24</height>
-						<texture>icons/circle-xmark.png</texture>
-						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertNoColor)]</colordiffuse>
-						<visible>String.Contains(Player.Process(amlogic.vs10.mode),Bypass) | String.IsEmpty(Player.Process(amlogic.vs10.mode))</visible>
-					</control>
-					<control type="label">
-						<left>270</left>
-						<top>30</top>
-						<width>40</width>
-						<align>center</align>
-						<label>|</label>
-						<font>font23_narrow</font>
-						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
-						<aligny>top</aligny>
-					</control>
-					<control type="image">
-						<left>310</left>
-						<top>35</top>
-						<width>24</width>
-						<height>24</height>
-						<texture>icons/check-circle.png</texture>
-						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertYesColor)]</colordiffuse>
-						<visible>Integer.IsEqual(Player.Process(video.vpmode),1)</visible>
-					</control>
-					<control type="image">
-						<left>310</left>
-						<top>35</top>
-						<width>24</width>
-						<height>24</height>
-						<texture>icons/circle-xmark.png</texture>
-						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertNoColor)]</colordiffuse>
-						<visible>Integer.IsEqual(Player.Process(video.vpmode),0) | String.IsEmpty(Player.Process(video.vpmode))</visible>
-					</control>
-					
+                    <!-- FEL pipeline replaces the CoreELEC VS10 / VP controls. -->
+                    <control type="label">
+                        <top>30</top><label>FEL pipeline:</label><font>font23_narrow</font><aligny>top</aligny>
+                        <textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
+                    </control>
+                    <control type="label">
+                        <left>240</left><top>30</top><width>380</width><font>font23_narrow</font><aligny>top</aligny>
+                        <label>$INFO[Window(10000).Property(SigndeTinyPPI.Process.firetv.fel.status)]</label>
+                        <textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
+                    </control>
 					<!-- VS10 status -->
 					<control type="label">
 						<top>60</top>
-						<label>$ADDON[script.signde.tinyppi 32524]:</label>
+						<label>Source HDR:</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
 						<aligny>top</aligny>
@@ -671,7 +634,7 @@
 					<!-- EOTF & Gamut -->
 					<control type="label">
 						<top>120</top>
-						<label>$ADDON[script.signde.tinyppi 32525]:</label>
+						<label>Transfer function:</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
 						<aligny>top</aligny>
@@ -680,7 +643,7 @@
 						<left>240</left>
 						<top>120</top>
 						<width>380</width>
-						<label>$INFO[Player.Process(amlogic.eoft_gamut)]</label>
+						<label>$INFO[Window(10000).Property(SigndeTinyPPI.Process.video.hdr.transfer)]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
@@ -702,7 +665,7 @@
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
-						<visible>String.Contains(Player.Process(video.source.hdr.type),SDR) + Integer.IsGreater(Player.Process(video.height.raw),479)</visible>
+						<visible>String.Contains(Window(10000).Property(SigndeTinyPPI.Process.video.source.hdr.type),SDR) + Integer.IsGreater(Window(10000).Property(SigndeTinyPPI.Process.video.height.raw),479)</visible>
 					</control>
 					<control type="label">
 						<left>240</left>
@@ -712,17 +675,17 @@
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
-						<visible>![String.Contains(Player.Process(video.source.hdr.type),SDR) + Integer.IsGreater(Player.Process(video.height.raw),479)] + String.Contains(Player.Process(video.dovi.profile),5)</visible>
+						<visible>![String.Contains(Window(10000).Property(SigndeTinyPPI.Process.video.source.hdr.type),SDR) + Integer.IsGreater(Window(10000).Property(SigndeTinyPPI.Process.video.height.raw),479)] + String.Contains(Window(10000).Property(SigndeTinyPPI.Process.video.dovi.profile),5)</visible>
 					</control>
 					<control type="label">
 						<left>240</left>
 						<top>150</top>
 						<width>380</width>
-						<label>$INFO[Player.Process(video.hdr.colour.primaries)]</label>
+						<label>$INFO[Window(10000).Property(SigndeTinyPPI.Process.video.hdr.colour.primaries)]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
-						<visible>![String.Contains(Player.Process(video.source.hdr.type),SDR) + Integer.IsGreater(Player.Process(video.height.raw),479)] + !String.Contains(Player.Process(video.dovi.profile),5) + !String.IsEmpty(Player.Process(video.hdr.colour.primaries))</visible>
+						<visible>![String.Contains(Window(10000).Property(SigndeTinyPPI.Process.video.source.hdr.type),SDR) + Integer.IsGreater(Window(10000).Property(SigndeTinyPPI.Process.video.height.raw),479)] + !String.Contains(Window(10000).Property(SigndeTinyPPI.Process.video.dovi.profile),5) + !String.IsEmpty(Window(10000).Property(SigndeTinyPPI.Process.video.hdr.colour.primaries))</visible>
 					</control>
 					<control type="label">
 						<left>240</left>
@@ -732,7 +695,7 @@
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
-						<visible>![String.Contains(Player.Process(video.source.hdr.type),SDR) + Integer.IsGreater(Player.Process(video.height.raw),479)] + !String.Contains(Player.Process(video.dovi.profile),5) + String.IsEmpty(Player.Process(video.hdr.colour.primaries))</visible>
+						<visible>![String.Contains(Window(10000).Property(SigndeTinyPPI.Process.video.source.hdr.type),SDR) + Integer.IsGreater(Window(10000).Property(SigndeTinyPPI.Process.video.height.raw),479)] + !String.Contains(Window(10000).Property(SigndeTinyPPI.Process.video.dovi.profile),5) + String.IsEmpty(Window(10000).Property(SigndeTinyPPI.Process.video.hdr.colour.primaries))</visible>
 					</control>
 					
 					<!-- Media source -->
@@ -747,7 +710,7 @@
 						<left>240</left>
 						<top>180</top>
 						<width>380</width>
-						<label>$INFO[Player.Process(video.source.hdr.type)]$INFO[Player.Process(video.dovi.dual.track), (,)]</label>
+						<label>$INFO[Window(10000).Property(SigndeTinyPPI.Process.video.source.hdr.type)]$INFO[Window(10000).Property(SigndeTinyPPI.Process.video.dovi.dual.track), (,)]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
@@ -1133,7 +1096,7 @@
 						<aligny>top</aligny>
 					</control>
 					
-					<!-- AML FPS -->
+					<!-- Source FPS -->
 					<control type="label">
 						<top>90</top>
 						<label>$ADDON[script.signde.tinyppi 32529]:</label>
@@ -1145,7 +1108,7 @@
 						<left>240</left>
 						<top>90</top>
 						<width>400</width>
-						<label>$INFO[Player.Process(amlogic.video.fps.info)] → [COLOR $INFO[Window(10000).Property(SigndeTinyPPI.FpsColor)]]$INFO[Player.Process(amlogic.video.fps.drop)] FPS[/COLOR]</label>
+						<label>$INFO[Window().Property(VideoFpsVar)]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
@@ -1163,7 +1126,7 @@
 						<left>240</left>
 						<top>60</top>
 						<width>400</width>
-						<label>$INFO[System.CPUTemperature] | $INFO[System.CpuAltUsage]</label>
+						<label>$INFO[Window().Property(CpuUsageVar)]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
@@ -1285,17 +1248,17 @@
 						<aligny>top</aligny>
 					</control>
 					<control type="label">
-						<visible>!Integer.IsGreater(Player.Process(video.queue.level),98)</visible>
+						<visible>!Integer.IsGreater(Player.Process(videoqueuelevel),98)</visible>
 						<left>240</left>
 						<top>150</top>
 						<width>65</width>
-						<label>$INFO[Player.Process(video.queue.level)]%</label>
+						<label>$INFO[Player.Process(videoqueuelevel)]%</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
 					</control>
 					<control type="label">
-						<visible>Integer.IsGreater(Player.Process(video.queue.level),98)</visible>
+						<visible>Integer.IsGreater(Player.Process(videoqueuelevel),98)</visible>
 						<left>240</left>
 						<top>150</top>
 						<width>65</width>
@@ -1314,7 +1277,7 @@
 							<height>8</height>
 							<description>BAR</description>
 							<centertop>50%</centertop>
-							<info>Player.Process(video.queue.level)</info>
+							<info>Player.Process(videoqueuelevel)</info>
 							<texturebg colordiffuse="1fededed" border="6">progress/bar.png</texturebg>
 							<lefttexture colordiffuse="00ffffff">common/dot-1x1.png</lefttexture>
 							<midtexture colordiffuse="$INFO[Window(10000).Property(SigndeTinyPPI.ProgressColor)]" border="6">progress/bar.png</midtexture>
@@ -1330,17 +1293,17 @@
 						<aligny>top</aligny>
 					</control>
 					<control type="label">
-						<visible>!Integer.IsGreater(Player.Process(video.queue.data.level),98)</visible>
+						<visible>!Integer.IsGreater(Player.Process(videoqueuedatalevel),98)</visible>
 						<left>240</left>
 						<top>180</top>
 						<width>65</width>
-						<label>$INFO[Player.Process(video.queue.data.level)]%</label>
+						<label>$INFO[Player.Process(videoqueuedatalevel)]%</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
 					</control>
 					<control type="label">
-						<visible>Integer.IsGreater(Player.Process(video.queue.data.level),98)</visible>
+						<visible>Integer.IsGreater(Player.Process(videoqueuedatalevel),98)</visible>
 						<left>240</left>
 						<top>180</top>
 						<width>65</width>
@@ -1359,7 +1322,7 @@
 							<height>8</height>
 							<description>BAR</description>
 							<centertop>50%</centertop>
-							<info>Player.Process(video.queue.data.level)</info>
+							<info>Player.Process(videoqueuedatalevel)</info>
 							<texturebg colordiffuse="1fededed" border="6">progress/bar.png</texturebg>
 							<lefttexture colordiffuse="00ffffff">common/dot-1x1.png</lefttexture>
 							<midtexture colordiffuse="$INFO[Window(10000).Property(SigndeTinyPPI.ProgressColor)]" border="6">progress/bar.png</midtexture>
@@ -1376,17 +1339,17 @@
 						<aligny>top</aligny>
 					</control>
 					<control type="label">
-						<visible>!Integer.IsGreater(Player.Process(audio.queue.level),98)</visible>
+						<visible>!Integer.IsGreater(Player.Process(audioqueuelevel),98)</visible>
 						<left>240</left>
 						<top>210</top>
 						<width>65</width>
-						<label>$INFO[Player.Process(audio.queue.level)]%</label>
+						<label>$INFO[Player.Process(audioqueuelevel)]%</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
 					</control>
 					<control type="label">
-						<visible>Integer.IsGreater(Player.Process(audio.queue.level),98)</visible>
+						<visible>Integer.IsGreater(Player.Process(audioqueuelevel),98)</visible>
 						<left>240</left>
 						<top>210</top>
 						<width>65</width>
@@ -1405,7 +1368,7 @@
 							<height>8</height>
 							<description>BAR</description>
 							<centertop>50%</centertop>
-							<info>Player.Process(audio.queue.level)</info>
+							<info>Player.Process(audioqueuelevel)</info>
 							<texturebg colordiffuse="1fededed" border="6">progress/bar.png</texturebg>
 							<lefttexture colordiffuse="00ffffff">common/dot-1x1.png</lefttexture>
 							<midtexture colordiffuse="$INFO[Window(10000).Property(SigndeTinyPPI.ProgressColor)]" border="6">progress/bar.png</midtexture>
@@ -1421,17 +1384,17 @@
 						<aligny>top</aligny>
 					</control>
 					<control type="label">
-						<visible>!Integer.IsGreater(Player.Process(audio.queue.data.level),98)</visible>
+						<visible>!Integer.IsGreater(Player.Process(audioqueuedatalevel),98)</visible>
 						<left>240</left>
 						<top>240</top>
 						<width>65</width>
-						<label>$INFO[Player.Process(audio.queue.data.level)]%</label>
+						<label>$INFO[Player.Process(audioqueuedatalevel)]%</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
 					</control>
 					<control type="label">
-						<visible>Integer.IsGreater(Player.Process(audio.queue.data.level),98)</visible>
+						<visible>Integer.IsGreater(Player.Process(audioqueuedatalevel),98)</visible>
 						<left>240</left>
 						<top>240</top>
 						<width>65</width>
@@ -1450,7 +1413,7 @@
 							<height>8</height>
 							<description>BAR</description>
 							<centertop>50%</centertop>
-							<info>Player.Process(audio.queue.data.level)</info>
+							<info>Player.Process(audioqueuedatalevel)</info>
 							<texturebg colordiffuse="1fededed" border="6">progress/bar.png</texturebg>
 							<lefttexture colordiffuse="00ffffff">common/dot-1x1.png</lefttexture>
 							<midtexture colordiffuse="$INFO[Window(10000).Property(SigndeTinyPPI.ProgressColor)]" border="6">progress/bar.png</midtexture>
@@ -1528,20 +1491,24 @@
 						<!-- Channel layout -->
 						<control type="group">
 							<top>140</top>
-							<control type="image">
+							<!-- Speaker graphic disabled for Fire TV:
+<control type="image">
 								<width>495</width>
 								<height>298</height>
 								<aspectratio>keep</aspectratio>
 								<texture colordiffuse="$INFO[Window(10000).Property(SigndeTinyPPI.ChannelLayoutColor)]">$INFO[Window().Property(ChannelLayerVar)]</texture>
 								<aligny>top</aligny>
 							</control>
-							<control type="image">
+-->
+							<!-- Speaker graphic disabled for Fire TV:
+<control type="image">
 								<width>495</width>
 								<height>298</height>
 								<aspectratio>keep</aspectratio>
 								<texture colordiffuse="$INFO[Window(10000).Property(SigndeTinyPPI.ChannelIconColor)]">$INFO[Window().Property(ChannelIconVar)]</texture>
 								<aligny>top</aligny>
 							</control>
+-->
 						</control>
 					</control>
 					
@@ -1741,11 +1708,11 @@
 						<align>left</align>
 						<left>340</left>
 						<top>120</top>
-						<label>$INFO[Player.Process(video.dovi.level)]</label>
+						<label>$INFO[Window(10000).Property(SigndeTinyPPI.Process.video.dovi.level)]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
-						<visible>!String.IsEmpty(Player.Process(video.dovi.level)) + !String.IsEqual(Player.Process(video.dovi.level),0)</visible>
+						<visible>!String.IsEmpty(Window(10000).Property(SigndeTinyPPI.Process.video.dovi.level)) + !String.IsEqual(Window(10000).Property(SigndeTinyPPI.Process.video.dovi.level),0)</visible>
 					</control>
 					<!-- N/A -->
 					<control type="label">
@@ -1757,7 +1724,7 @@
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
-						<visible>String.IsEmpty(Player.Process(video.dovi.level)) | String.IsEqual(Player.Process(video.dovi.level),0)</visible>
+						<visible>String.IsEmpty(Window(10000).Property(SigndeTinyPPI.Process.video.dovi.level)) | String.IsEqual(Window(10000).Property(SigndeTinyPPI.Process.video.dovi.level),0)</visible>
 					</control>
 					
 					<!-- RPU / BL -->
@@ -1933,32 +1900,8 @@
 						<visible>String.IsEmpty(Window.Property(DoviElTypeVar))</visible>
 					</control>
 
-					<!-- CMv2.9 to CMv4.0 -->
-					<control type="label">
-						<top>210</top>
-						<label>CMv2.9 → CMv4.0:</label>
-						<font>font23_narrow</font>
-						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
-						<aligny>top</aligny>
-					</control>
-					<control type="image">
-						<left>340</left>
-						<top>215</top>
-						<width>24</width>
-						<height>24</height>
-						<texture>icons/check-circle.png</texture>
-						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertYesColor)]</colordiffuse>
-						<visible>String.Contains(Player.Process(video.source.dovi.meta.version),CMv2.9) + String.Contains(Player.Process(video.dovi.meta.version),CMv4.0)</visible>
-					</control>
-					<control type="image">
-						<left>340</left>
-						<top>215</top>
-						<width>24</width>
-						<height>24</height>
-						<texture>icons/circle-xmark.png</texture>
-						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertNoColor)]</colordiffuse>
-						<visible>![String.Contains(Player.Process(video.source.dovi.meta.version),CMv2.9) + String.Contains(Player.Process(video.dovi.meta.version),CMv4.0)]</visible>
-					</control>
+                    <!-- CoreELEC CM conversion controls do not apply to Fire OS. -->
+
 				</control>
 				
 				<!-- Group: Metadata -->
@@ -1999,7 +1942,7 @@
 						<top>30</top>
 						<width>270</width>
 						<align>right</align>
-						<label>$INFO[Player.Process(video.hdr.min.lum)] | $INFO[Player.Process(video.hdr.max.lum)] cd/m²</label>
+						<label>$INFO[Window().Property(Hdr10MdlVar)]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
@@ -2047,7 +1990,7 @@
 						<top>91</top>
 						<width>270</width>
 						<align>right</align>
-						<label>$INFO[Player.Process(video.dovi.l6.min.lum)] | $INFO[Player.Process(video.dovi.l6.max.lum)] cd/m²</label>
+						<label>$INFO[Window().Property(DoviLevel6MdlVar)]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
@@ -2095,7 +2038,7 @@
 						<top>153</top>
 						<width>270</width>
 						<align>right</align>
-						<label>$INFO[Player.Process(video.dovi.source.min.nits)] | $INFO[Player.Process(video.dovi.source.max.nits)] cd/m²</label>
+						<label>$INFO[Window().Property(DoviSourceNitsVar)]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
@@ -2114,7 +2057,7 @@
 						<top>180</top>
 						<width>270</width>
 						<align>right</align>
-						<label>$INFO[Player.Process(video.dovi.source.min.pq)] | $INFO[Player.Process(video.dovi.source.max.pq)] 12-bit</label>
+						<label>$INFO[Window().Property(DoviSourcePqVar)]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>

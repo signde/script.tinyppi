@@ -441,7 +441,7 @@ def apply_theme(home, addon=None, overrides=None, custom=None) -> None:
     # AF3's full-screen vertical gradient. The XML hides the Modern background
     # controls entirely rather than relying on a zero-alpha colordiffuse, which
     # some CoreELEC render paths resolve as opaque white.
-    ppi_mode = "modern" if addon.getSettingInt("ppi_mode") == 1 else "classic"
+    ppi_mode = "classic"
     home.setProperty("SigndeTinyPPI.PPIMode", ppi_mode)
 
     home.setProperty(

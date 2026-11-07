@@ -13,6 +13,7 @@ if _LIB_PATH not in sys.path:
     sys.path.insert(0, _LIB_PATH)
 
 from ui.theme import apply_theme
+from ui.fonts import FontInstallMonitor
 
 _ADDON_ID = "script.signde.tinyppi"
 _HOME_WINDOW_ID = 10000
@@ -72,6 +73,7 @@ class KodiMonitor(xbmc.Monitor):
 if __name__ == "__main__":
     addon = xbmcaddon.Addon()
     window = xbmcgui.Window(_HOME_WINDOW_ID)
+    font_monitor = FontInstallMonitor()
     monitor = KodiMonitor()
 
     try:
@@ -82,3 +84,4 @@ if __name__ == "__main__":
     xbmc.log("TinyPPI: KodiMonitor started", xbmc.LOGINFO)
     monitor.waitForAbort()
     del monitor
+    del font_monitor

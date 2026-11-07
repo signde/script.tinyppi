@@ -53,6 +53,9 @@ from info.dvinfo import (
     get_l6_rpu_max_cll_fall,
     get_output_mode,
     get_rpu_mdl,
+    get_source_nits,
+    get_source_pq,
+    get_l6_mdl,
     get_rpu_mdl_from_source,
     get_structure,
     is_status_label,
@@ -92,7 +95,7 @@ def get_VideoPixelFormatVar() -> str:
     """Parse ``amlogic.pixformat`` into e.g. ``10-bit (YUV 4:2:0)`` / ``8-bit, RGB``."""
     val = info("Player.Process(amlogic.pixformat)").strip()
     if not val:
-        return ""
+        return "N/A"
 
     match = re.search(
         r"(\d+)-bit\s*,\s*(RGB|YUV420|YUV422|YUV444)",
@@ -120,7 +123,7 @@ def get_DisplayModeVar() -> str:
     """Parse ``amlogic.displaymode`` into a compact string like ``1080p 23.976Hz``."""
     val = info("Player.Process(amlogic.displaymode)").strip()
     if not val:
-        return ""
+        return "N/A"
 
     compact = re.sub(r"\s+", "", val)
     match = re.match(
@@ -136,16 +139,21 @@ def get_DisplayModeVar() -> str:
 
 
 def get_VideoResolutionVar() -> str:
-    """Return a string like ``1920x1080p 23.976FPS``."""
+    """Return the source resolution and scan type, such as ``1920x1080p``."""
     width  = clean(info("Player.Process(videowidth)"))
     height = clean(info("Player.Process(videoheight)"))
     scan   = clean(info("Player.Process(videoscantype)"))
-    fps    = clean(info("Player.Process(videofps)"))
 
     if not width or not height:
         return ""
 
-    return f"{width}x{height}{scan} {format_fps(fps)}FPS"
+    return f"{width}x{height}{scan}"
+
+
+def get_VideoFpsVar() -> str:
+    """Source frame rate, not a measured hardware presentation rate."""
+    fps = clean(info("Player.Process(videofps)"))
+    return format_fps(fps) if fps else "N/A"
 
 
 # Aspect ratios a computed picture is snapped to when it lands close enough.
@@ -240,7 +248,7 @@ def get_VideoLiveBitrateVar() -> str:
         return ""
 
     value = str(bitrate).replace(",", ".")
-    return value if "/s" in value else f"{value} Mb/s"
+    return value if "/s" in value else f"{value} Mib/s"
 
 
 def get_VideoCodecVar() -> str:
@@ -263,6 +271,8 @@ def get_VideoDecoderNameVar() -> str:
         return ""
 
     low = raw.lower()
+    if low.startswith("amc"):
+        return "MediaCodec-"
     if low.startswith("am-"):
         return "AML-"
     if low.startswith("ff-"):
@@ -271,17 +281,9 @@ def get_VideoDecoderNameVar() -> str:
 
 
 def get_VideoBitDepthVar() -> str:
-    """Return the source bit depth for display, e.g. ``12-bit``.
-
-    Only a full enhancement layer raises the depth, to the 12-bit the base
-    layer and FEL reconstruct to; dvinfo reports that one case.  Every other
-    HDR format -- MEL, single-layer Dolby Vision, HDR10, HDR10+, HLG -- is
-    10-bit, and SDR is 8-bit.
-    """
+    """Source base-layer depth; not HDMI depth or composed FEL precision."""
     value = get_bit_depth()
-    if not value or is_status_label(value):
-        return "10-bit" if get_hdr_format() else "8-bit"
-    return f"{value}-bit"
+    return f"{value}-bit" if value and not is_status_label(value) else "N/A"
 
 
 # --- HDR / Dolby Vision properties -----------------------------------------
@@ -354,43 +356,18 @@ def _with_unit(value: str, unit: str) -> str:
 # --- Amlogic EOFT / gamut --------------------------------------------------
 
 def get_VS10StatusVar() -> str:
-    """Describe the active VS10 mode, including a source-to-output conversion."""
-    mode = info("Player.Process(amlogic.vs10.mode)").strip()
-    if not mode:
-        return "N/A"
-    if mode.lower() == "bypass":
-        return "Bypass"
-
-    source = info("Player.Process(video.source.hdr.type)").strip()
-    if not source:
-        return mode
-    if source.casefold() != mode.casefold():
-        return f"{source} → {mode}"
-
-    # Keep useful source profile detail when DV remains DV. Do not infer the
-    # converted output's profile from the source or from the selected mode.
-    if source.casefold() == "dolby vision":
-        profile = info("Player.Process(video.dovi.profile)").strip()
-        if profile and profile != "0":
-            source += f" Profile {profile}"
-        layer = info("Player.Process(video.dovi.el.type)").strip().lower()
-        if layer == "full":
-            source += " FEL"
-        elif layer == "minimum":
-            source += " MEL"
-    return source
+    """Source HDR description, without implying a VS10 conversion."""
+    return get_output_mode() or "SDR"
 
 
 def get_ModeVar() -> str:
     """Return the first token of ``amlogic.eoft_gamut`` (the mode field)."""
-    parts = info("Player.Process(amlogic.eoft_gamut)").split()
-    return parts[0] if parts else ""
+    # No VS10 conversion is inferred from the source metadata.
+    return ""
 
 
 def get_GamutVar() -> str:
-    """Return the second token of ``amlogic.eoft_gamut`` (the gamut field)."""
-    parts = info("Player.Process(amlogic.eoft_gamut)").split()
-    return parts[1] if len(parts) > 1 else ""
+    return info("Player.Process(video.hdr.colour.primaries)")
 
 
 def _output_mode_from_videoplayer() -> str:
@@ -434,7 +411,7 @@ def get_AudioLiveBitrateVar() -> str:
         return ""
 
     value = str(bitrate).replace(",", ".")
-    return value if "/s" in value else f"{value} Kb/s"
+    return value if "/s" in value else f"{value} Kib/s"
 
 
 def get_AudioCodecVar() -> str:
@@ -486,12 +463,11 @@ def get_AudioChannelsVar() -> str:
 
 
 def get_AudioChannelsInputVar() -> str:
-    """Return the full speaker-label string for the current channel count."""
-    try:
-        ch = int(info("VideoPlayer.AudioChannels"))
-        return CHANNELS_INPUT_MAP.get(ch, xbmc.getLocalizedString(13205))
-    except (ValueError, TypeError):
-        return xbmc.getLocalizedString(13205)
+    value = info("Player.Process(audiochannels)")
+    if "RAW" in value.upper():
+        count = info("VideoPlayer.AudioChannels")
+        return f"{count} channels" if count else "N/A"
+    return value or "N/A"
 
 
 def _channel_layout() -> str:
@@ -538,6 +514,9 @@ def get_AudioBitDepthVar() -> str:
     bitstream handed to the sink untouched during passthrough — and that is
     shown as nothing at all rather than as a zero.
     """
+    if cond("Player.Passthrough"):
+        # Kodi reports its RAW transport word size, not the encoded audio precision.
+        return ""
     bits = clean(info("Player.Process(AudioBitsPerSample)")).strip()
     try:
         depth = int(float(bits))
@@ -613,17 +592,8 @@ def _cpu_core_loads(raw: str) -> list[float]:
 
 
 def get_CpuUsageVar() -> str:
-    """Parse ``System.CpuUsage`` into a pipe-separated per-core string,
-    e.g. ``'12 | 08 | 15 | 10'``."""
-    raw = info("System.CpuUsage")
-    if not raw:
-        return ""
-
-    loads = _cpu_core_loads(raw)
-    if not loads:
-        return raw
-
-    return " | ".join(f"{int(v):02d}" for v in loads)
+    from info.firetv import cpu_usage
+    return cpu_usage()
 
 
 def get_CpuTopUsageVar() -> str:
@@ -717,7 +687,9 @@ def publish_channel_visibility(home=None, published=None) -> None:
     """
     home = home or xbmcgui.Window(10000)
     setting = _channel_setting_for(home.getProperty("SigndeTinyPPI.EffectiveHdrType"))
-    enabled = xbmcaddon.Addon().getSetting(setting) == "true"
+    # Speaker graphics are retained in source but disabled for the Fire TV port.
+    # enabled = xbmcaddon.Addon().getSetting(setting) == "true"
+    enabled = False
     if published is None:
         published = {}
     set_changed_properties(
@@ -903,6 +875,9 @@ def publish_scene_properties(window, published=None) -> None:
             ("DoviLevel1FllVar", l1_fll),
             ("DoviLevel1PqVar", l1_pq),
             ("DoviRpuMdlVar", rpu_mdl),
+            ("DoviLevel6MdlVar", _with_unit(_separated(get_l6_mdl()), unit)),
+            ("DoviSourceNitsVar", _with_unit(_separated(get_source_nits()), unit)),
+            ("DoviSourcePqVar", _with_unit(_separated(get_source_pq()), pq_unit)),
             ("DoviRpuMdlFromSourceVar", rpu_mdl_from_source),
             ("DoviLevel6RpuMaxCllFallVar", l6_rpu_max_cll_fall),
             ("Hdr10MdlVar", hdr10_mdl),
@@ -962,6 +937,7 @@ def publish_static_properties(window, published=None) -> None:
             ("VideoPixelFormatVar", get_VideoPixelFormatVar()),
             ("DisplayModeVar", get_DisplayModeVar()),
             ("VideoResolutionVar", get_VideoResolutionVar()),
+            ("VideoFpsVar", get_VideoFpsVar()),
             ("VideoLetterboxOffsetVar", get_VideoLetterboxOffsetVar()),
             ("ImaxVar", get_ImaxVar()),
             ("VideoBitrateMBVar", get_VideoBitrateMBVar()),

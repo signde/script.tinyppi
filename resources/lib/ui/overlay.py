@@ -37,8 +37,6 @@ _ADDON_PATH = _ADDON.getAddonInfo("path")
 
 _dialog_lock = False
 
-# Raise to True to allow launching on non-CoreELEC platforms (e.g. for testing).
-_ALLOW_NON_COREELEC = False
 
 # Runtime nudge: pixels moved per arrow-key press, and the direction each key
 # shifts the overlay by.  Off unless the viewer turns it on (see
@@ -148,21 +146,16 @@ def _preflight(home, player, toggle_log: str) -> bool:
     Returns True when the overlay may open, else shows an error notification
     (or triggers the toggle-close) and returns False.
     """
-    if not _ALLOW_NON_COREELEC:
-        if not _is_coreelec():
-            _notify_error(32016)
-            return False
-
-        build_version = xbmc.getInfoLabel("System.BuildVersion")
-        try:
-            major_version = int(build_version.split(".")[0])
-        except (ValueError, IndexError):
-            _notify_error(32017)
-            return False
-
-        if major_version < 21:
-            _notify_error(32016)
-            return False
+    if not xbmc.getCondVisibility("System.Platform.Android"):
+        xbmcgui.Dialog().notification("signde PPI", "This version requires Kodi FEL on Android")
+        return False
+    try:
+        major = int(xbmc.getInfoLabel("System.BuildVersion").split(".")[0])
+    except (ValueError, IndexError):
+        return False
+    if major < 22:
+        xbmcgui.Dialog().notification("signde PPI", "Kodi 22 or later is required")
+        return False
 
     skin_path = xbmcvfs.translatePath("special://skin/")
     if os.path.exists(os.path.join(skin_path, "720p")):
@@ -547,7 +540,7 @@ def _show_overlay(home) -> None:
 def open_tinyppi() -> None:
     """Validate the environment and show TinyPPI until the viewer closes it.
 
-    Skips silently on non-CoreELEC (unless ``_ALLOW_NON_COREELEC``), Kodi < 21,
+    Requires Android Kodi 22, and skips on
     a 720p skin, no fullscreen video, or nothing playing; toggle-closes when the
     overlay is already open.
     """
@@ -557,7 +550,7 @@ def open_tinyppi() -> None:
     if not _preflight(home, player, "TinyPPI: Toggle close"):
         return
 
-    modern_mode = _ADDON.getSettingInt("ppi_mode") == 1
+    modern_mode = False
     elements_visible = _elements_visible() if modern_mode else "0"
     _set_overlay_state(home)
     set_window_properties(

@@ -1,10 +1,4 @@
-"""Dolby Vision and HDR values exposed by the CoreELEC 21 player API.
-
-The CE21 forks already parse the active stream and publish the fields TinyPPI
-needs through ``Player.Process``. Keeping this small formatting layer lets the
-overlay, splash, and property publisher share consistent values directly from
-the fork's parsed player state.
-"""
+"""Format source HDR metadata exposed by the Kodi FEL adapter."""
 
 import re
 
@@ -16,8 +10,8 @@ import xbmcgui
 _ADDON = xbmcaddon.Addon()
 _LABEL_NA = 32033
 
-L5_EMPTY = "0 | 0 | 0 | 0"
-L1_EMPTY = "0 | 0 | 0"
+L5_EMPTY = "N/A"
+L1_EMPTY = "N/A"
 
 
 def _na_label() -> str:
@@ -37,7 +31,8 @@ def is_status_label(value: str) -> bool:
 def _process(name: str) -> str:
     """Read one CE21 Player.Process label, rejecting unknown-label echoes."""
     label = f"Player.Process({name})"
-    value = (xbmc.getInfoLabel(label) or "").strip()
+    from core.utils import info
+    value = info(label).strip()
     return "" if value.lower() == label.lower() else value
 
 
@@ -116,7 +111,7 @@ def get_output_mode() -> str:
         if profile:
             parts.extend(("Profile", profile))
         if el_type in ("FEL", "MEL"):
-            parts.append(el_type)
+            parts.append(get_dv_el_type())
         return " ".join(parts)
     return {"hdr10+": "HDR10+", "hdr10": "HDR10", "hlg": "HLG", "": "SDR"}[hdr]
 
@@ -150,10 +145,19 @@ def get_l5_offsets() -> str:
 
 def get_l1_nits() -> str:
     """Return current L1 luminance as min | max | average nits."""
-    return _joined(
-        "video.dovi.l1.min.nits", "video.dovi.l1.max.nits",
-        "video.dovi.l1.avg.nits",
-    ) or (L1_EMPTY if _playing() else "")
+    values = [_process("video.dovi.l1." + key + ".nits") for key in ("min", "max", "avg")]
+    if not all(values):
+        return L1_EMPTY if _playing() else ""
+    # Keep the three-value row within the classic panel. Exact PQ codes are below it.
+    def compact(value):
+        try:
+            number = float(value)
+            if number >= 100:
+                return f"{number:.0f}"
+            return value.rstrip("0").rstrip(".") if "." in value else value
+        except ValueError:
+            return value
+    return " | ".join(compact(value) for value in values)
 
 
 def get_l1_pq() -> str:
@@ -174,7 +178,7 @@ def _l6_mdl() -> str:
 
 def get_rpu_mdl() -> str:
     """Return source mastering range, falling back to L6."""
-    return _source_mdl() or _l6_mdl() or ("0 | 0" if _playing() else "")
+    return _source_mdl() or _l6_mdl() or (_na_label() if _playing() else "")
 
 
 def get_rpu_mdl_from_source() -> str:
@@ -186,21 +190,21 @@ def get_rpu_mdl_from_source() -> str:
 def get_l6_rpu_max_cll_fall() -> str:
     return _joined(
         "video.dovi.l6.max.cll", "video.dovi.l6.max.fall"
-    ) or ("0 | 0" if _playing() else "")
+    ) or (_na_label() if _playing() else "")
 
 
 def get_hdr10_mdl(l6_fallback: bool = False) -> str:
     value = _joined("video.hdr.min.lum", "video.hdr.max.lum")
     if not value and l6_fallback:
         value = _l6_mdl()
-    return value or ("0 | 0" if _playing() else "")
+    return value or (_na_label() if _playing() else "")
 
 
 def get_hdr10_max_cll_fall(l6_fallback: bool = False) -> str:
     value = _joined("video.hdr.max.cll", "video.hdr.max.fall")
     if not value and l6_fallback:
         value = _joined("video.dovi.l6.max.cll", "video.dovi.l6.max.fall")
-    return value or ("0 | 0" if _playing() else "")
+    return value or (_na_label() if _playing() else "")
 
 
 def get_dv_version() -> str:
@@ -243,7 +247,7 @@ def get_dv_el_type_raw() -> str:
         value = _normalise_el(_process(name))
         if value in ("FEL", "MEL"):
             return value
-    return _profile()
+    return ""
 
 
 def get_dv_el_type() -> str:
@@ -259,3 +263,15 @@ def get_dv_el_type() -> str:
 
 def get_bit_depth() -> str:
     return _value("video.bit.depth")
+
+
+def get_source_nits() -> str:
+    return _source_mdl() or (_na_label() if _playing() else "")
+
+
+def get_source_pq() -> str:
+    return _joined("video.dovi.source.min.pq", "video.dovi.source.max.pq") or (_na_label() if _playing() else "")
+
+
+def get_l6_mdl() -> str:
+    return _l6_mdl() or (_na_label() if _playing() else "")

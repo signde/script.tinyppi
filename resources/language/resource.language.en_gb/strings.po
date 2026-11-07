@@ -1396,7 +1396,7 @@ msgid "Dialog normalization"
 msgstr ""
 
 msgctxt "#32529"
-msgid "AML FPS"
+msgid "FPS"
 msgstr ""
 
 msgctxt "#32530"

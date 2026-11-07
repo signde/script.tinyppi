@@ -3,6 +3,7 @@
 import os
 import sys
 
+import xbmc
 import xbmcaddon
 
 
@@ -23,33 +24,40 @@ def _split_args(raw_args: list[str]) -> list[str]:
 
 def main() -> None:
     """Dispatch TinyPPI's script entry point."""
-    addon = xbmcaddon.Addon()
-    _bootstrap_lib_path(addon)
-
-    from ui.mode_select import set_mode
-    from ui.overlay import open_dialog_mode, open_tinyppi
-
     args = _split_args(sys.argv[1:])
     command = args[0] if args else ""
 
-    if not command:
-        if addon.getSetting("launch_mode") == "1":
-            open_dialog_mode()
-        else:
-            open_tinyppi()
-        return
+    # Add-on playback dialogs (for example Uno) have their own keymap context.
+    # Preserve the Menu button elsewhere instead of taking over library menus.
+    if command == "context_menu":
+        if not (xbmc.Player().isPlayingVideo() and
+                xbmc.getCondVisibility("Window.IsActive(fullscreenvideo)")):
+            xbmc.executebuiltin("Action(ContextMenu)")
+            return
 
-    if command == "dialog":
-        open_dialog_mode()
-    elif command == "splash":
+    addon = xbmcaddon.Addon()
+    if addon.getSettingInt("ppi_mode") != 0:
+        addon.setSettingInt("ppi_mode", 0)
+    _bootstrap_lib_path(addon)
+
+    from ui.overlay import open_tinyppi
+
+    if command == "splash":
         from ui.splash import open_splash
         open_splash()
-    elif command == "run_mode" and len(args) > 1:
-        set_mode(args[1])
+    elif command in ("dialog", "run_mode", "context_menu"):
+        # CoreELEC VS10 controls must never change Fire OS display state.
+        open_tinyppi()
     elif command == "custom_color" and len(args) > 1:
         from ui.theme import custom_color
         custom_color(args[1])
     else:
+        if xbmc.Player().isPlayingVideo():
+            xbmc.executebuiltin("ActivateWindow(fullscreenvideo)")
+            for _ in range(30):
+                if xbmc.getCondVisibility("Window.IsActive(fullscreenvideo)"):
+                    break
+                xbmc.sleep(100)
         open_tinyppi()
 
 
