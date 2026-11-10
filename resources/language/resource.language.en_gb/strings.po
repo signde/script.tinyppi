@@ -1471,3 +1471,11 @@ msgstr ""
 msgctxt "#32547"
 msgid "Decoded output"
 msgstr ""
+
+msgctxt "#32548"
+msgid "Module"
+msgstr ""
+
+msgctxt "#32549"
+msgid "Target max luminance"
+msgstr ""

@@ -203,6 +203,35 @@ def get_hdr10_max_cll_fall(l6_fallback: bool = False) -> str:
     return value or ("0 | 0" if _playing() else "")
 
 
+def get_dv_module() -> str:
+    """The backend applied to the active video, not merely a loaded module."""
+    if not _playing():
+        return ""
+    value = _process("amlogic.dv.backend")
+    return value or (_na_label() if _playing() else "")
+
+
+def get_dv_target_max_luminance() -> str:
+    """Preserve the fork's VSVDB display-peak value, including R11's pair.
+
+    p3i returns configured whole nits only during player-led DV output. Its
+    compatibility alias and avdvplus use video.dovi.vsvdb.max.lum. Neither
+    missing labels nor display-led output should become a guessed value.
+    """
+    if not _playing():
+        return ""
+    value = _process("video.dovi.vsvdb.max.lum")
+    if not value:
+        value = _process("amlogic.dv.target.max.nits")
+    if not value or value.lower() in ("n/a", "unavailable"):
+        return _na_label() if _playing() else ""
+    # Older forks may return already formatted units or explanatory text.
+    # Only decorate a bare numeric value/pair; leave supplied wording intact.
+    if re.fullmatch(r"[\d.,\s|/()]+", value):
+        return f"{value} nits"
+    return value
+
+
 def get_dv_version() -> str:
     major = _process("video.dovi.version.major")
     minor = _process("video.dovi.version.minor")

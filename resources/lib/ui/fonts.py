@@ -1,8 +1,8 @@
 """Register the overlay's font sizes in the active Kodi skin.
 
-The overlay lays out against two specific sizes (21 for the metadata rows, 32
-for the headers), so it registers them in the skin's Font.xml under its own
-names.  Both name ``arial.ttf``, which Kodi distributes itself -- nothing is
+The overlay lays out against specific sizes (21 for metadata rows, 26 for the overlay title,
+and 32 for dialog headers), so it registers them in the skin's Font.xml under its own
+names.  All use ``arial.ttf``, which Kodi distributes itself -- nothing is
 copied into the skin, so there is no font file that can go missing or drift out
 of sync with the entry that names it.
 
@@ -36,6 +36,7 @@ _FONT_FILE = "special://xbmc/media/Fonts/arial.ttf"
 # [B] markup in the skin XML, so no separate bold face is registered.
 _REQUIRED_FONTS = (
     {"name": "font23_narrow", "filename": _FONT_FILE, "size": "21"},
+    {"name": "signde_ppi_header", "filename": _FONT_FILE, "size": "26"},
     {"name": "font32",        "filename": _FONT_FILE, "size": "32"},
 )
 

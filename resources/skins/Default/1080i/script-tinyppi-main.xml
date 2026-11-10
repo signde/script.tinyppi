@@ -81,10 +81,10 @@
 				<control type="group">
 					<visible>String.IsEqual(Window(10000).Property(SigndeTinyPPI.ShowHeaderTitle),1)</visible>
 					<left>70</left>
-					<top>341</top>
+					<top>327</top>
 					<control type="label">
 						<label>[B][CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE][/B]</label>
-						<font>font32</font>
+						<font>signde_ppi_header</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.HeaderColor)]</textcolor>
 						<aligny>top</aligny>
 					</control>
@@ -94,10 +94,10 @@
 				<control type="group">
 					<visible>String.IsEqual(Window(10000).Property(SigndeTinyPPI.ShowHeaderIcon),1)</visible>
 					<left>1219</left>
-					<top>345</top>
+					<top>328</top>
 					<control type="image">
-						<width>36</width>
-						<height>36</height>
+						<width>28</width>
+						<height>28</height>
 						<texture colordiffuse="$INFO[Window(10000).Property(SigndeTinyPPI.HeaderIconColor)]">icons/chart.png</texture>
 					</control>
 				</control>
@@ -106,7 +106,7 @@
 				<control type="group">
 					<visible>String.IsEqual(Window(10000).Property(SigndeTinyPPI.ShowLine),1)</visible>
 					<left>70</left>
-					<top>405</top>
+					<top>375</top>
 					<control type="image">
 						<width>1186</width>
 						<height>1</height>
@@ -188,10 +188,10 @@
 				<control type="group">
 					<visible>String.IsEqual(Window(10000).Property(SigndeTinyPPI.ShowHeaderTitle),1)</visible>
 					<left>70</left>
-					<top>341</top>
+					<top>327</top>
 					<control type="label">
 						<label>[B][CAPITALIZE]$LOCALIZE[10116][/CAPITALIZE][/B]</label>
-						<font>font32</font>
+						<font>signde_ppi_header</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.HeaderColor)]</textcolor>
 						<aligny>top</aligny>
 					</control>
@@ -201,10 +201,10 @@
 				<control type="group">
 					<visible>String.IsEqual(Window(10000).Property(SigndeTinyPPI.ShowHeaderIcon),1)</visible>
 					<left>1812</left>
-					<top>345</top>
+					<top>328</top>
 					<control type="image">
-						<width>36</width>
-						<height>36</height>
+						<width>28</width>
+						<height>28</height>
 						<texture colordiffuse="$INFO[Window(10000).Property(SigndeTinyPPI.HeaderIconColor)]">icons/chart.png</texture>
 					</control>
 				</control>
@@ -213,7 +213,7 @@
 				<control type="group">
 					<visible>String.IsEqual(Window(10000).Property(SigndeTinyPPI.ShowLine),1)</visible>
 					<left>70</left>
-					<top>405</top>
+					<top>375</top>
 					<control type="image">
 						<width>1779</width>
 						<height>1</height>
@@ -336,7 +336,7 @@
 				<width>1920</width>
 				<height>0</height>
 				<left>40</left>
-				<top>425</top>
+				<top>395</top>
 				
 				<!-- Group: Video -->
 				<control type="group">
@@ -1632,9 +1632,28 @@
 						<aligny>top</aligny>
 					</control>
 					
-					<!-- Metadata -->
+					<!-- DoviModuleVar -->
 					<control type="label">
 						<top>30</top>
+						<width>250</width>
+						<label>$ADDON[script.signde.tinyppi 32548]:</label>
+						<font>font23_narrow</font>
+						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
+						<aligny>top</aligny>
+					</control>
+					<control type="label">
+						<left>340</left>
+						<top>30</top>
+						<width>155</width>
+						<align>left</align>
+						<label>$INFO[Window().Property(DoviModuleVar)]</label>
+						<font>font23_narrow</font>
+						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
+						<aligny>top</aligny>
+					</control>
+					<!-- Metadata -->
+					<control type="label">
+						<top>60</top>
 						<label>$ADDON[script.signde.tinyppi 32289]:</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
@@ -1644,7 +1663,7 @@
 						<width>200</width>
 						<align>left</align>
 						<left>340</left>
-						<top>30</top>
+						<top>60</top>
 						<label>$INFO[Window().Property(DoviCmVersionVar)]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
@@ -1656,7 +1675,7 @@
 						<width>200</width>
 						<align>left</align>
 						<left>340</left>
-						<top>30</top>
+						<top>60</top>
 						<label>$ADDON[script.signde.tinyppi 32033]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
@@ -1666,7 +1685,7 @@
 					
 					<!-- Version -->
 					<control type="label">
-						<top>60</top>
+						<top>90</top>
 						<label>$ADDON[script.signde.tinyppi 32291]:</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
@@ -1676,7 +1695,7 @@
 						<width>200</width>
 						<align>left</align>
 						<left>340</left>
-						<top>60</top>
+						<top>90</top>
 						<label>$INFO[Window().Property(DoviVersionVar)]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
@@ -1688,7 +1707,7 @@
 						<width>200</width>
 						<align>left</align>
 						<left>340</left>
-						<top>60</top>
+						<top>90</top>
 						<label>$ADDON[script.signde.tinyppi 32033]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
@@ -1698,7 +1717,7 @@
 					
 					<!-- Profile -->
 					<control type="label">
-						<top>90</top>
+						<top>120</top>
 						<label>$ADDON[script.signde.tinyppi 32290]:</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
@@ -1708,7 +1727,7 @@
 						<width>200</width>
 						<align>left</align>
 						<left>340</left>
-						<top>90</top>
+						<top>120</top>
 						<label>$INFO[Window().Property(DoviProfileNumberVar)]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
@@ -1720,7 +1739,7 @@
 						<width>200</width>
 						<align>left</align>
 						<left>340</left>
-						<top>90</top>
+						<top>120</top>
 						<label>$ADDON[script.signde.tinyppi 32033]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
@@ -1730,7 +1749,7 @@
 					
 					<!-- Level -->
 					<control type="label">
-						<top>120</top>
+						<top>150</top>
 						<label>$ADDON[script.signde.tinyppi 32534]:</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
@@ -1740,7 +1759,7 @@
 						<width>200</width>
 						<align>left</align>
 						<left>340</left>
-						<top>120</top>
+						<top>150</top>
 						<label>$INFO[Player.Process(video.dovi.level)]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
@@ -1752,7 +1771,7 @@
 						<width>200</width>
 						<align>left</align>
 						<left>340</left>
-						<top>120</top>
+						<top>150</top>
 						<label>$ADDON[script.signde.tinyppi 32033]</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
@@ -1762,7 +1781,7 @@
 					
 					<!-- RPU / BL -->
 					<control type="label">
-						<top>150</top>
+						<top>180</top>
 						<label>$ADDON[script.signde.tinyppi 32381] :</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
@@ -1770,7 +1789,7 @@
 					</control>
 					<control type="image">
 						<left>340</left>
-						<top>155</top>
+						<top>185</top>
 						<width>24</width>
 						<height>24</height>
 						<texture>icons/check-circle.png</texture>
@@ -1780,7 +1799,7 @@
 					</control>
 					<control type="image">
 						<left>340</left>
-						<top>155</top>
+						<top>185</top>
 						<width>24</width>
 						<height>24</height>
 						<texture>icons/circle-xmark.png</texture>
@@ -1791,7 +1810,7 @@
 					<!-- N/A -->
 					<control type="label">
 						<left>340</left>
-						<top>150</top>
+						<top>180</top>
 						<width>70</width>
 						<align>left</align>
 						<label>$ADDON[script.signde.tinyppi 32033]</label>
@@ -1799,92 +1818,6 @@
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
 						<visible>String.IsEmpty(Window.Property(DoviRpuPresentVar))</visible>
-					</control>
-					
-					<!-- Delimiter -->
-					<control type="label">
-						<left>374</left>
-						<top>147</top>
-						<width>40</width>
-						<align>center</align>
-						<label>|</label>
-						<font>font23_narrow</font>
-						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
-						<aligny>top</aligny>
-					</control>
-					
-					<control type="image">
-						<left>420</left>
-						<top>155</top>
-						<width>24</width>
-						<height>24</height>
-						<texture>icons/check-circle.png</texture>
-						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertYesColor)]</colordiffuse>
-						<aspectratio>keep</aspectratio>
-						<visible>String.IsEqual(Window.Property(DoviBlPresentVar),true)</visible>
-					</control>
-					<control type="image">
-						<left>420</left>
-						<top>155</top>
-						<width>24</width>
-						<height>24</height>
-						<texture>icons/circle-xmark.png</texture>
-						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertNoColor)]</colordiffuse>
-						<aspectratio>keep</aspectratio>
-						<visible>String.IsEqual(Window.Property(DoviBlPresentVar),false)</visible>
-					</control>
-					<!-- N/A -->
-					<control type="label">
-						<left>420</left>
-						<top>150</top>
-						<width>100</width>
-						<align>left</align>
-						<label>$ADDON[script.signde.tinyppi 32033]</label>
-						<font>font23_narrow</font>
-						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
-						<aligny>top</aligny>
-						<visible>String.IsEmpty(Window.Property(DoviBlPresentVar))</visible>
-					</control>
-					
-					<!-- EL / Type -->
-					<control type="label">
-						<top>180</top>
-						<label>$ADDON[script.signde.tinyppi 32382]:</label>
-						<font>font23_narrow</font>
-						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
-						<aligny>top</aligny>
-					</control>
-					<control type="image">
-						<left>340</left>
-						<top>185</top>
-						<width>24</width>
-						<height>24</height>
-						<texture>icons/check-circle.png</texture>
-						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertYesColor)]</colordiffuse>
-						<aspectratio>keep</aspectratio>
-						<visible>String.IsEqual(Window.Property(DoviElPresentVar),true)</visible>
-					</control>
-					<control type="image">
-						<left>340</left>
-						<top>185</top>
-						<width>24</width>
-						<height>24</height>
-						<texture>icons/circle-xmark.png</texture>
-						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertNoColor)]</colordiffuse>
-						<aspectratio>keep</aspectratio>
-						<visible>String.IsEqual(Window.Property(DoviElPresentVar),false)</visible>
-					</control>
-					<!-- N/A -->
-					<control type="label">
-						<left>340</left>
-						<top>180</top>
-						<width>70</width>
-						<align>left</align>
-						<label>$ADDON[script.signde.tinyppi 32033]</label>
-						<font>font23_narrow</font>
-						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
-						<aligny>top</aligny>
-						<visible>String.IsEmpty(Window.Property(DoviElPresentVar))</visible>
 					</control>
 					
 					<!-- Delimiter -->
@@ -1899,16 +1832,15 @@
 						<aligny>top</aligny>
 					</control>
 					
-					<control type="label">
+					<control type="image">
 						<left>420</left>
-						<top>180</top>
-						<width>100</width>
-						<align>left</align>
-						<label>$INFO[Window.Property(DoviElTypeVar)]</label>
-						<font>font23_narrow</font>
-						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
-						<aligny>top</aligny>
-						<visible>String.Contains(Window.Property(DoviElTypeVar),FEL) | String.Contains(Window.Property(DoviElTypeVar),MEL)</visible>
+						<top>185</top>
+						<width>24</width>
+						<height>24</height>
+						<texture>icons/check-circle.png</texture>
+						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertYesColor)]</colordiffuse>
+						<aspectratio>keep</aspectratio>
+						<visible>String.IsEqual(Window.Property(DoviBlPresentVar),true)</visible>
 					</control>
 					<control type="image">
 						<left>420</left>
@@ -1918,7 +1850,7 @@
 						<texture>icons/circle-xmark.png</texture>
 						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertNoColor)]</colordiffuse>
 						<aspectratio>keep</aspectratio>
-						<visible>![String.Contains(Window.Property(DoviElTypeVar),FEL) | String.Contains(Window.Property(DoviElTypeVar),MEL) | String.IsEmpty(Window.Property(DoviElTypeVar))]</visible>
+						<visible>String.IsEqual(Window.Property(DoviBlPresentVar),false)</visible>
 					</control>
 					<!-- N/A -->
 					<control type="label">
@@ -1930,13 +1862,13 @@
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
 						<aligny>top</aligny>
-						<visible>String.IsEmpty(Window.Property(DoviElTypeVar))</visible>
+						<visible>String.IsEmpty(Window.Property(DoviBlPresentVar))</visible>
 					</control>
-
-					<!-- CMv2.9 to CMv4.0 -->
+					
+					<!-- EL / Type -->
 					<control type="label">
 						<top>210</top>
-						<label>CMv2.9 → CMv4.0:</label>
+						<label>$ADDON[script.signde.tinyppi 32382]:</label>
 						<font>font23_narrow</font>
 						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
 						<aligny>top</aligny>
@@ -1948,7 +1880,8 @@
 						<height>24</height>
 						<texture>icons/check-circle.png</texture>
 						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertYesColor)]</colordiffuse>
-						<visible>String.Contains(Player.Process(video.source.dovi.meta.version),CMv2.9) + String.Contains(Player.Process(video.dovi.meta.version),CMv4.0)</visible>
+						<aspectratio>keep</aspectratio>
+						<visible>String.IsEqual(Window.Property(DoviElPresentVar),true)</visible>
 					</control>
 					<control type="image">
 						<left>340</left>
@@ -1957,14 +1890,119 @@
 						<height>24</height>
 						<texture>icons/circle-xmark.png</texture>
 						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertNoColor)]</colordiffuse>
+						<aspectratio>keep</aspectratio>
+						<visible>String.IsEqual(Window.Property(DoviElPresentVar),false)</visible>
+					</control>
+					<!-- N/A -->
+					<control type="label">
+						<left>340</left>
+						<top>210</top>
+						<width>70</width>
+						<align>left</align>
+						<label>$ADDON[script.signde.tinyppi 32033]</label>
+						<font>font23_narrow</font>
+						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
+						<aligny>top</aligny>
+						<visible>String.IsEmpty(Window.Property(DoviElPresentVar))</visible>
+					</control>
+					
+					<!-- Delimiter -->
+					<control type="label">
+						<left>374</left>
+						<top>207</top>
+						<width>40</width>
+						<align>center</align>
+						<label>|</label>
+						<font>font23_narrow</font>
+						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
+						<aligny>top</aligny>
+					</control>
+					
+					<control type="label">
+						<left>420</left>
+						<top>210</top>
+						<width>100</width>
+						<align>left</align>
+						<label>$INFO[Window.Property(DoviElTypeVar)]</label>
+						<font>font23_narrow</font>
+						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
+						<aligny>top</aligny>
+						<visible>String.Contains(Window.Property(DoviElTypeVar),FEL) | String.Contains(Window.Property(DoviElTypeVar),MEL)</visible>
+					</control>
+					<control type="image">
+						<left>420</left>
+						<top>215</top>
+						<width>24</width>
+						<height>24</height>
+						<texture>icons/circle-xmark.png</texture>
+						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertNoColor)]</colordiffuse>
+						<aspectratio>keep</aspectratio>
+						<visible>![String.Contains(Window.Property(DoviElTypeVar),FEL) | String.Contains(Window.Property(DoviElTypeVar),MEL) | String.IsEmpty(Window.Property(DoviElTypeVar))]</visible>
+					</control>
+					<!-- N/A -->
+					<control type="label">
+						<left>420</left>
+						<top>210</top>
+						<width>100</width>
+						<align>left</align>
+						<label>$ADDON[script.signde.tinyppi 32033]</label>
+						<font>font23_narrow</font>
+						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
+						<aligny>top</aligny>
+						<visible>String.IsEmpty(Window.Property(DoviElTypeVar))</visible>
+					</control>
+
+					<!-- CMv2.9 to CMv4.0 -->
+					<control type="label">
+						<top>240</top>
+						<label>CMv2.9 → CMv4.0:</label>
+						<font>font23_narrow</font>
+						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
+						<aligny>top</aligny>
+					</control>
+					<control type="image">
+						<left>340</left>
+						<top>245</top>
+						<width>24</width>
+						<height>24</height>
+						<texture>icons/check-circle.png</texture>
+						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertYesColor)]</colordiffuse>
+						<visible>String.Contains(Player.Process(video.source.dovi.meta.version),CMv2.9) + String.Contains(Player.Process(video.dovi.meta.version),CMv4.0)</visible>
+					</control>
+					<control type="image">
+						<left>340</left>
+						<top>245</top>
+						<width>24</width>
+						<height>24</height>
+						<texture>icons/circle-xmark.png</texture>
+						<colordiffuse>$INFO[Window(10000).Property(SigndeTinyPPI.ConvertNoColor)]</colordiffuse>
 						<visible>![String.Contains(Player.Process(video.source.dovi.meta.version),CMv2.9) + String.Contains(Player.Process(video.dovi.meta.version),CMv4.0)]</visible>
+					</control>
+					<!-- DoviTargetMaxLuminanceVar -->
+					<control type="label">
+						<top>270</top>
+						<width>250</width>
+						<label>$ADDON[script.signde.tinyppi 32549]:</label>
+						<font>font23_narrow</font>
+						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.DescriptionColor)]</textcolor>
+						<aligny>top</aligny>
+					</control>
+					<control type="label">
+						<left>340</left>
+						<top>270</top>
+						<width>155</width>
+						<align>left</align>
+						<label>$INFO[Window().Property(DoviTargetMaxLuminanceVar)]</label>
+						<font>font23_narrow</font>
+						<textcolor>$INFO[Window(10000).Property(SigndeTinyPPI.OutputColor)]</textcolor>
+						<aligny>top</aligny>
 					</control>
 				</control>
 				
 				<!-- Group: Metadata -->
 				<control type="group">
 				<visible>String.Contains(Window(10000).Property(SigndeTinyPPI.EffectiveHdrType),dolby)</visible>
-					<top>270</top>
+					<top>330</top>
 					<left>1315</left>
 					
 					<!-- Metadata Icon -->
