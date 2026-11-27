@@ -6,6 +6,7 @@ overlay, splash, and property publisher share consistent values directly from
 the fork's parsed player state.
 """
 
+import json
 import re
 
 import xbmc
@@ -126,6 +127,22 @@ def get_cm_version() -> str:
     return _value("video.dovi.meta.version")
 
 
+def get_cm_conversion() -> str:
+    """Whether CMv4.0 was appended, rather than authored in the source.
+
+    p3i prefixes the processed metadata version with V only after an append.
+    avdvplus exposes separate source and processed metadata versions instead.
+    Preserve the existing off state when neither signal confirms conversion.
+    """
+    if not _playing():
+        return "false"
+    active = _process("video.dovi.meta.version").lower()
+    if active.startswith("vcmv4.0"):
+        return "true"
+    source = _process("video.source.dovi.meta.version").lower()
+    return "true" if "cmv2.9" in source and "cmv4.0" in active else "false"
+
+
 def get_structure() -> str:
     """Return ``ST-SL``, ``ST-DL``, or ``DT-DL`` for the source."""
     source = _source_hdr_label()
@@ -146,6 +163,50 @@ def get_l5_offsets() -> str:
         "video.dovi.l5.left.offset", "video.dovi.l5.right.offset",
         "video.dovi.l5.top.offset", "video.dovi.l5.bottom.offset",
     ) or (L5_EMPTY if _playing() else "")
+
+
+def get_detected_borders() -> str:
+    """Return the detector's subtitle envelope, not effective or source L5.
+
+    One snapshot keeps the four coded-video-pixel offsets from the same result.
+    An unavailable result must not look like a valid full-frame (all-zero) one.
+    """
+    if not _playing():
+        return ""
+    try:
+        snapshot = json.loads(_process("video.borders"))
+    except (ValueError, TypeError):
+        return _na_label()
+    if (not isinstance(snapshot, dict) or snapshot.get("version") != 1
+            or snapshot.get("valid") is not True
+            or snapshot.get("coordinate_system") != "coded-video-pixels"):
+        return _na_label()
+    offsets = [snapshot.get(key) for key in ("left", "right", "top", "bottom")]
+    if any(type(value) is not int or value < 0 for value in offsets):
+        return _na_label()
+    return " | ".join(f"{value} {side}" for value, side in zip(offsets, "LRTB"))
+
+
+def get_l5_detection_state() -> str:
+    """Format T5's native DV detector state; unsupported labels stay N/A."""
+    if not _playing():
+        return ""
+    # Match the explicit strings so an empty/unknown label never becomes Failed.
+    states = {
+        "0": (32552, "Failed"),
+        "1": (32553, "Skipped (non-16:9)"),
+        "2": (32554, "Skipped (variable/uncertain)"),
+        "3": (32555, "Detected"),
+        "4": (32556, "Skipped"),
+        "5": (32557, "Disabled / inactive"),
+        "6": (32558, "Running"),
+        "7": (32559, "Timed out"),
+    }
+    state = states.get(_process("video.dovi.l5.detect.state"))
+    if state is None:
+        return _na_label()
+    number, fallback = state
+    return _ADDON.getLocalizedString(number) or fallback
 
 
 def get_l1_nits() -> str:
@@ -201,6 +262,35 @@ def get_hdr10_max_cll_fall(l6_fallback: bool = False) -> str:
     if not value and l6_fallback:
         value = _joined("video.dovi.l6.max.cll", "video.dovi.l6.max.fall")
     return value or ("0 | 0" if _playing() else "")
+
+
+def get_dv_module() -> str:
+    """The backend applied to the active video, not merely a loaded module."""
+    if not _playing():
+        return ""
+    value = _process("amlogic.dv.backend")
+    return value or (_na_label() if _playing() else "")
+
+
+def get_dv_target_max_luminance() -> str:
+    """Preserve the fork's VSVDB display-peak value, including R11's pair.
+
+    p3i returns configured whole nits only during player-led DV output. Its
+    compatibility alias and avdvplus use video.dovi.vsvdb.max.lum. Neither
+    missing labels nor display-led output should become a guessed value.
+    """
+    if not _playing():
+        return ""
+    value = _process("video.dovi.vsvdb.max.lum")
+    if not value:
+        value = _process("amlogic.dv.target.max.nits")
+    if not value or value.lower() in ("n/a", "unavailable"):
+        return _na_label() if _playing() else ""
+    # Older forks may return already formatted units or explanatory text.
+    # Only decorate a bare numeric value/pair; leave supplied wording intact.
+    if re.fullmatch(r"[\d.,\s|/()]+", value):
+        return f"{value} nits"
+    return value
 
 
 def get_dv_version() -> str:

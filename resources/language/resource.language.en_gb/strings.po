@@ -1471,3 +1471,51 @@ msgstr ""
 msgctxt "#32547"
 msgid "Decoded output"
 msgstr ""
+
+msgctxt "#32548"
+msgid "Module"
+msgstr ""
+
+msgctxt "#32549"
+msgid "Target max luminance"
+msgstr ""
+
+msgctxt "#32550"
+msgid "Detected borders"
+msgstr ""
+
+msgctxt "#32551"
+msgid "L5 detection"
+msgstr ""
+
+msgctxt "#32552"
+msgid "Failed"
+msgstr ""
+
+msgctxt "#32553"
+msgid "Skipped (non-16:9)"
+msgstr ""
+
+msgctxt "#32554"
+msgid "Skipped (variable/uncertain)"
+msgstr ""
+
+msgctxt "#32555"
+msgid "Detected"
+msgstr ""
+
+msgctxt "#32556"
+msgid "Skipped"
+msgstr ""
+
+msgctxt "#32557"
+msgid "Disabled / inactive"
+msgstr ""
+
+msgctxt "#32558"
+msgid "Running"
+msgstr ""
+
+msgctxt "#32559"
+msgid "Timed out"
+msgstr ""

@@ -91,6 +91,8 @@ AUDIO_CODEC_MAP = {
     "dtshd":           "DTS-HD",
     "dtshd_ma":        "DTS-HD MA",
     "dtshd_hra":       "DTS-HD HRA",
+    "dtshd_hra_x":     "DTS-HD HRA / DTS:X",
+    "dtshd_ma_auro3d": "DTS-HD MA / Auro-3D",
     "dtshd_ma_x":      "DTS:X",
     "dtshd_ma_x_imax": "DTS:X",
 
@@ -124,8 +126,8 @@ AUDIO_CODEC_MAP = {
     "cdda":            "CD Audio",
 }
 
-# Audio codec -> splash logo (VideoPlayer.AudioCodec -> codecs/*.png, relative to
-# the skin media folder).  Unmapped codecs omit the audio image.
+# Audio codec -> splash logo (relative to the skin media folder).
+# Unmapped codecs omit the audio image.
 AUDIO_LOGO_MAP = {
     # AAC
     "aac":             "codecs/AAC.png",
@@ -153,6 +155,8 @@ AUDIO_LOGO_MAP = {
     "dtshd":           "codecs/DTS-HD-MA.png",
     "dtshd_ma":        "codecs/DTS-HD-MA.png",
     "dtshd_hra":       "codecs/DTS-HD-HRA.png",
+    "dtshd_hra_x":     "codecs/DTSX.png",
+    "dtshd_ma_auro3d": "codecs/Auro3D.png",
     "dtshd_ma_x":      "codecs/DTSX.png",
     "dtshd_ma_x_imax": "codecs/IMAX.png",
 
@@ -238,6 +242,7 @@ CHANNELS_ICON_MAP = {
 HEIGHT_CHANNEL_CODECS = frozenset({
     "eac3_ddp_atmos",
     "truehd_atmos",
+    "dtshd_hra_x",
     "dtshd_ma_x",
     "dtshd_ma_x_imax",
 })

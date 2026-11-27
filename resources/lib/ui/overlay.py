@@ -51,7 +51,7 @@ _NUDGE_STEP = 10
 # the nudge and the configured offsets are clamped so these stay on screen.
 _CONTENT_LEFT         = 35
 _CONTENT_BOTTOM       = 1045
-_CONTENT_TOP          = 340
+_CONTENT_TOP          = 327
 _CONTENT_TOP_DV       = 37    # DV with channels: separate panel above the main box
 _CONTENT_RIGHT_NARROW = 1292  # SDR without channels
 _CONTENT_RIGHT_WIDE   = 1885  # HDR, and SDR with channels

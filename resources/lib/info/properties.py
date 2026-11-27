@@ -38,18 +38,23 @@ from info.mediasource import get_MediaSourceVar
 from info.dvinfo import (
     get_bit_depth,
     get_cm_version,
+    get_cm_conversion,
     get_dv_bl_present,
     get_dv_el_present,
     get_dv_el_type,
     get_dv_profile,
     get_dv_rpu_present,
     get_dv_version,
+    get_dv_module,
+    get_dv_target_max_luminance,
     get_hdr10_max_cll_fall,
     get_hdr10_mdl,
     get_hdr_format,
     get_l1_nits,
     get_l1_pq,
     get_l5_offsets,
+    get_detected_borders,
+    get_l5_detection_state,
     get_l6_rpu_max_cll_fall,
     get_output_mode,
     get_rpu_mdl,
@@ -465,7 +470,7 @@ def get_AudioObjectDescriptionVar() -> str:
         return "Atmos"
     if codec == "dtshd_ma_x_imax":
         return "IMAX"
-    if codec == "dtshd_ma_x":
+    if codec in ("dtshd_ma_x", "dtshd_hra_x"):
         return "DTS:X"
     return xbmcaddon.Addon().getLocalizedString(32033) or "N/A"
 
@@ -898,7 +903,10 @@ def publish_scene_properties(window, published=None) -> None:
             ("AspectRatioVar", get_AspectRatioVar(l5_offsets)),
             ("DoviLevel5OffsetsVar", _separated(l5_offsets)),
             ("DoviLevel5OffsetsIconVisible", l5_icon_visible),
+            ("DoviModuleVar", get_dv_module()),
+            ("DoviTargetMaxLuminanceVar", get_dv_target_max_luminance()),
             ("DoviCmVersionVar", get_cm_version()),
+            ("DoviCmConversionVar", get_cm_conversion()),
             ("DoviStructureVar", get_structure()),
             ("DoviLevel1FllVar", l1_fll),
             ("DoviLevel1PqVar", l1_pq),
@@ -963,6 +971,8 @@ def publish_static_properties(window, published=None) -> None:
             ("DisplayModeVar", get_DisplayModeVar()),
             ("VideoResolutionVar", get_VideoResolutionVar()),
             ("VideoLetterboxOffsetVar", get_VideoLetterboxOffsetVar()),
+            ("DetectedBordersVar", get_detected_borders()),
+            ("L5DetectionStateVar", get_l5_detection_state()),
             ("ImaxVar", get_ImaxVar()),
             ("VideoBitrateMBVar", get_VideoBitrateMBVar()),
             ("VideoLiveBitrateVar", get_VideoLiveBitrateVar()),
